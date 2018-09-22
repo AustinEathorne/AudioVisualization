@@ -7,10 +7,12 @@ public class Visualization512Samples : VisualizationBase
 {
     public Transform dynamicObjContainer;
 
-    public GameObject[] cubeArray = new GameObject[512];
-
     public float minScale;
+    public float maxScale;
     public float scaleMultiplier;
+
+    public GameObject[] cubeArray = new GameObject[512];
+    public Material[] materialArray = new Material[512];
 
 
     #region Main
@@ -62,6 +64,7 @@ public class Visualization512Samples : VisualizationBase
                     if (_obj != null)
                     {
                         this.cubeArray[i] = _obj;
+                        this.materialArray[i] = _obj.GetComponent<MeshRenderer>().material;
                     }
                 }));
 
@@ -74,13 +77,22 @@ public class Visualization512Samples : VisualizationBase
 
     public IEnumerator ScaleCubes()
     {
+        float scale = 0.0f;
+
         for (int i = 0; i < this.cubeArray.Length; i++)
         {
             if (this.cubeArray[i] == null)
                 continue;
 
-            this.cubeArray[i].transform.localScale = new Vector3(
-                1.0f, this.minScale + (AudioPeer.Instance.audioSamples[i] * this.scaleMultiplier), 1.0f);
+            scale = AudioPeer.Instance.audioSamples[i] * this.scaleMultiplier < this.minScale ? 
+                this.minScale : this.minScale + (AudioPeer.Instance.audioSamples[i] * this.scaleMultiplier);
+
+            scale = scale > this.maxScale ? this.maxScale : scale;
+
+            this.cubeArray[i].transform.localScale = new Vector3(1.0f, scale, 1.0f);
+
+            float color = scale / this.maxScale;
+            this.materialArray[i].color = new Color(color, 0.5f, 0.0f);
         }
 
         yield return null;
