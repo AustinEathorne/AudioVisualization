@@ -15,9 +15,9 @@ public class Visualization512Samples : VisualizationBase
     public float maxMaxScale;
     public float maxScale;
 
-    public float scaleMultiplier;
     public float minScaleMultiplier;
     public float maxScaleMultiplier;
+    public float scaleMultiplier;
 
     public GameObject[] cubeArray = new GameObject[512];
     public Material[] materialArray = new Material[512];
