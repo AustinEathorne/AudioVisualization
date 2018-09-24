@@ -7,9 +7,17 @@ public class Visualization512Samples : VisualizationBase
 {
     public Transform dynamicObjContainer;
 
+    public float minMinScale;
+    public float maxMinScale;
     public float minScale;
+
+    public float minMaxScale;
+    public float maxMaxScale;
     public float maxScale;
+
     public float scaleMultiplier;
+    public float minScaleMultiplier;
+    public float maxScaleMultiplier;
 
     public GameObject[] cubeArray = new GameObject[512];
     public Material[] materialArray = new Material[512];
@@ -19,6 +27,7 @@ public class Visualization512Samples : VisualizationBase
 
     public override IEnumerator Initialize()
     {
+        yield return this.canvas.StartCoroutine(this.canvas.Initialize());
         yield return this.StartCoroutine(this.InstantiateCubes());
 
         yield return null;
@@ -96,6 +105,25 @@ public class Visualization512Samples : VisualizationBase
         }
 
         yield return null;
+    }
+
+    #endregion
+
+    #region Get/Set Radio Future
+
+    public void SetMinScale(float _scale)
+    {
+        this.minScale = _scale;
+    }
+
+    public void SetMaxScale(float _scale)
+    {
+        this.maxScale = _scale;
+    }
+
+    public void SetScaleMultiplier(float _multiplier)
+    {
+        this.scaleMultiplier = _multiplier;
     }
 
     #endregion

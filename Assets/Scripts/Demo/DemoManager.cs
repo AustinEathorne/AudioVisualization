@@ -7,6 +7,7 @@ public class DemoManager : MonoSingleton<DemoManager>
 {
     public VisualizationBase visualizationManager;
     
+
     #region Main
 
     public IEnumerator Start()
