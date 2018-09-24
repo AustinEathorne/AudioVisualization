@@ -62,5 +62,20 @@ public class AudioManager : MonoSingleton<AudioManager>
         this.audioSource.Play();
     }
 
+    public void PlayMusic()
+    {
+        this.audioSource.Play();
+    }
+
+    public void PauseMusic()
+    {
+        this.audioSource.Pause();
+    }
+
+    public void Search(float _time)
+    {
+        this.audioSource.time = _time;
+    }
+
     #endregion
 }

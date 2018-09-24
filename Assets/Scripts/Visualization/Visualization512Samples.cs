@@ -37,6 +37,9 @@ public class Visualization512Samples : VisualizationBase
     {
         this.isRunning = true;
 
+        // Start canvas run routine
+        this.canvas.StartCoroutine(this.canvas.Run());
+
         while (this.isRunning)
         {
             yield return this.StartCoroutine(this.ScaleCubes());

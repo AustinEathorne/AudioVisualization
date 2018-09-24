@@ -21,6 +21,10 @@ public class Canvas512Samples : CanvasBase
     [Header("Song")]
     public Dropdown songDropdown;
 
+    [Header("Search Bar")]
+    public Slider searchBar;
+    public bool isSearching;
+
     public override IEnumerator Initialize()
     {
         yield return this.StartCoroutine(this.SetupUI());
@@ -28,11 +32,25 @@ public class Canvas512Samples : CanvasBase
 
     public override IEnumerator Run()
     {
+        this.isRunning = true;
+
+        while (this.isRunning)
+        {
+            // update search bar if we're not searching
+            if (!isSearching)
+            {
+                this.searchBar.value = AudioManager.Instance.audioSource.time;
+            }
+
+            yield return null;
+        }
+
         yield return null;
     }
 
     public override IEnumerator Stop()
     {
+        this.isRunning = false;
         yield return null;
     }
 
@@ -65,6 +83,19 @@ public class Canvas512Samples : CanvasBase
     public void OnSongDropdownUpdate(int _index)
     {
         AudioManager.Instance.ChangeSong(_index);
+        this.ResetSearchBar();
+    }
+
+    public void OnSearchBarSelect()
+    {
+        this.StartCoroutine(this.SearchRoutine());
+        Debug.Log("Select");
+    }
+
+    public void OnSearchBarReleased()
+    {
+        this.isSearching = false;
+        Debug.Log("Release");
     }
 
     #endregion
@@ -73,6 +104,7 @@ public class Canvas512Samples : CanvasBase
 
     public IEnumerator SetupUI()
     {
+        // Settings panel
         this.minScaleSlider.minValue = this.visualization.minMinScale;
         this.minScaleSlider.maxValue = this.visualization.maxMinScale;
         this.minScaleSlider.value = this.visualization.minScale;
@@ -88,6 +120,7 @@ public class Canvas512Samples : CanvasBase
         this.scaleMultiplierSlider.value = this.visualization.scaleMultiplier;
         this.scaleMultiplierText.text = this.visualization.scaleMultiplier.ToString();
 
+        // Song dropdown
         List<Dropdown.OptionData> dataList = new List<Dropdown.OptionData>();
 
         foreach (AudioClip clip in AudioManager.Instance.songs)
@@ -100,7 +133,38 @@ public class Canvas512Samples : CanvasBase
 
         this.songDropdown.AddOptions(dataList);
 
+        // Search bar
+        this.searchBar.maxValue = AudioManager.Instance.songs[0].length;
+        this.searchBar.value = 0.0f;
+        
         yield return null;
+    }
+
+    public IEnumerator SearchRoutine()
+    {
+        if (this.isSearching)
+            yield break;
+
+        this.isSearching = true;
+
+        AudioManager.Instance.PauseMusic();
+
+        while (this.isSearching)
+        {
+            AudioManager.Instance.Search(this.searchBar.value);
+
+            yield return null;
+        }
+
+        AudioManager.Instance.PlayMusic();
+
+        yield return null;
+    }
+
+    public void ResetSearchBar()
+    {
+        this.searchBar.maxValue = AudioManager.Instance.songs[this.songDropdown.value].length;
+        this.searchBar.value = 0.0f;
     }
 
     public void ToggleSettingsPanel()
