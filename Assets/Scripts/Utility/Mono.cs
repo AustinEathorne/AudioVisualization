@@ -3,7 +3,9 @@ using UnityEngine;
 
 public abstract class Mono<T> : MonoBehaviour where T: MonoBehaviour
 {
+    protected bool isInitialized;
     protected bool isRunning;
+
     public abstract IEnumerator Initialize();
     public abstract IEnumerator Run();
     public abstract IEnumerator Stop();

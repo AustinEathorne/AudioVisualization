@@ -4,5 +4,4 @@ using UnityEngine;
 
 public abstract class VisualizationBase : Mono<VisualizationBase>
 {
-    public CanvasBase canvas;
 }

@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class DemoManager : MonoSingleton<DemoManager>
 {
-    public VisualizationBase visualizationManager;
-    
+    public List<VisualizationBase> visManagerList;
+    public int currentVisualization;
+    public bool isChangingVisualization;
 
     #region Main
 
@@ -23,13 +24,20 @@ public class DemoManager : MonoSingleton<DemoManager>
 
     public override IEnumerator Initialize()
     {
+        this.isInitialized = false;
+
         // Initialize other singleton managers
+        yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.Initialize());
         yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.Initialize());
         yield return ObjectInstantiater.Instance.StartCoroutine(ObjectInstantiater.Instance.Initialize());
 
         // Get and initilialize scene managers
-        this.visualizationManager = GameObject.FindGameObjectWithTag("VisualizationManager").GetComponent<VisualizationBase>();
-        yield return this.visualizationManager.StartCoroutine(this.visualizationManager.Initialize());
+        foreach (VisualizationBase manager in this.visManagerList)
+        {
+            yield return manager.StartCoroutine(manager.Initialize());
+        }
+
+        this.isInitialized = true;
 
         yield return null;
     }
@@ -40,9 +48,11 @@ public class DemoManager : MonoSingleton<DemoManager>
 
         // Run other singleton managers
         AudioManager.Instance.StartCoroutine(AudioManager.Instance.Run());
+        CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.Run());
 
-        // Run scene manager
-        this.visualizationManager.StartCoroutine(this.visualizationManager.Run());
+        // Run first visualization manager
+        this.visManagerList[0].StartCoroutine(this.visManagerList[0].Run());
+        this.currentVisualization = 0;
 
         while (this.isRunning)
         {
@@ -58,6 +68,33 @@ public class DemoManager : MonoSingleton<DemoManager>
         this.isRunning = false;
 
         // Stop other singleton managers
+
+        yield return null;
+    }
+
+    #endregion
+
+    #region Visualizations
+
+    public IEnumerator ChangeVisualization(int _index)
+    {
+        yield return new WaitUntil(() => this.isChangingVisualization == true);
+
+        // Pause audio
+        AudioManager.Instance.PauseMusic();
+
+        // Stop visualization thats running
+        yield return this.visManagerList[this.currentVisualization].StartCoroutine(this.visManagerList[this.currentVisualization].Stop());
+
+        // Update UI
+        yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ChangeVisualization(_index));
+
+        // Start new visualization
+        yield return this.visManagerList[_index].StartCoroutine(this.visManagerList[_index].Stop());
+        this.currentVisualization = _index;
+
+        // Play audio
+        AudioManager.Instance.PlayMusic();
 
         yield return null;
     }

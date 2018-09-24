@@ -15,11 +15,15 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public override IEnumerator Initialize()
     {
+        this.isInitialized = false;
+
         // Set clip
         this.audioSource.clip = this.songs[0];
 
         // Yield audio peer initialization
         yield return AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Initialize());
+
+        this.isInitialized = true;
 
         yield return null;
     }
@@ -58,6 +62,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         this.audioSource.Stop();
 
         this.audioSource.clip = this.songs[_index];
+        this.audioSource.time = 0.0f;
 
         this.audioSource.Play();
     }

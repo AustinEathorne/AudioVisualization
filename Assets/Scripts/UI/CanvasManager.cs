@@ -4,20 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Canvas512Samples : CanvasBase
+public class CanvasManager : MonoSingleton<CanvasManager>
 {
-    [Header("Vis Manager")]
-    public Visualization512Samples visualization;
-
-    [Header("Settings")]
-    public GameObject settingsPanel;
-    public Slider minScaleSlider;
-    public Text minScaleText;
-    public Slider maxScaleSlider;
-    public Text maxScaleText;
-    public Slider scaleMultiplierSlider;
-    public Text scaleMultiplierText;
-
     [Header("Song")]
     public Dropdown songDropdown;
 
@@ -25,9 +13,23 @@ public class Canvas512Samples : CanvasBase
     public Slider searchBar;
     public bool isSearching;
 
+    [Header("Visualization")]
+    public Dropdown visualizationDropdown;
+
+    [Header("Settings Panels")]
+    public List<SettingsPanelBase> settingsPanelList;
+
+
+
+    #region Main
+
     public override IEnumerator Initialize()
     {
+        this.isInitialized = false;
+
         yield return this.StartCoroutine(this.SetupUI());
+
+        this.isInitialized = true;
     }
 
     public override IEnumerator Run()
@@ -54,30 +56,13 @@ public class Canvas512Samples : CanvasBase
         yield return null;
     }
 
+    #endregion
 
     #region Events
 
     public void OnSettingsClick()
     {
         this.ToggleSettingsPanel();
-    }
-
-    public void OnMinScaleUpdate(float _value)
-    {
-        this.minScaleText.text = _value.ToString();
-        this.visualization.SetMinScale(_value);
-    }
-
-    public void OnMaxScaleUpdate(float _value)
-    {
-        this.maxScaleText.text = _value.ToString();
-        this.visualization.SetMaxScale(_value);
-    }
-
-    public void OnMultiplierUpdate(float _value)
-    {
-        this.scaleMultiplierText.text = _value.ToString();
-        this.visualization.SetScaleMultiplier(_value);
     }
 
     public void OnSongDropdownUpdate(int _index)
@@ -89,13 +74,16 @@ public class Canvas512Samples : CanvasBase
     public void OnSearchBarSelect()
     {
         this.StartCoroutine(this.SearchRoutine());
-        Debug.Log("Select");
     }
 
-    public void OnSearchBarReleased()
+    public void OnSearchBarRelease()
     {
         this.isSearching = false;
-        Debug.Log("Release");
+    }
+
+    public void OnVisualizationDropdownUpdate(int _index)
+    {
+        DemoManager.Instance.StartCoroutine(DemoManager.Instance.ChangeVisualization(_index));
     }
 
     #endregion
@@ -104,22 +92,6 @@ public class Canvas512Samples : CanvasBase
 
     public IEnumerator SetupUI()
     {
-        // Settings panel
-        this.minScaleSlider.minValue = this.visualization.minMinScale;
-        this.minScaleSlider.maxValue = this.visualization.maxMinScale;
-        this.minScaleSlider.value = this.visualization.minScale;
-        this.minScaleText.text = this.visualization.minScale.ToString();
-
-        this.maxScaleSlider.minValue = this.visualization.minMaxScale;
-        this.maxScaleSlider.maxValue = this.visualization.maxMaxScale;
-        this.maxScaleSlider.value = this.visualization.maxScale;
-        this.maxScaleText.text = this.visualization.maxScale.ToString();
-
-        this.scaleMultiplierSlider.minValue = this.visualization.minScaleMultiplier;
-        this.scaleMultiplierSlider.maxValue = this.visualization.maxScaleMultiplier;
-        this.scaleMultiplierSlider.value = this.visualization.scaleMultiplier;
-        this.scaleMultiplierText.text = this.visualization.scaleMultiplier.ToString();
-
         // Song dropdown
         List<Dropdown.OptionData> dataList = new List<Dropdown.OptionData>();
 
@@ -136,7 +108,10 @@ public class Canvas512Samples : CanvasBase
         // Search bar
         this.searchBar.maxValue = AudioManager.Instance.songs[0].length;
         this.searchBar.value = 0.0f;
-        
+
+        // Settings panel
+        yield return this.settingsPanelList[0].StartCoroutine(this.settingsPanelList[0].Initialize());
+
         yield return null;
     }
 
@@ -169,7 +144,17 @@ public class Canvas512Samples : CanvasBase
 
     public void ToggleSettingsPanel()
     {
-        this.settingsPanel.SetActive(!this.settingsPanel.activeSelf);
+        this.settingsPanelList[this.visualizationDropdown.value].TogglePanel();
+    }
+
+    public IEnumerator ChangeVisualization(int _index)
+    {
+        this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(
+            this.settingsPanelList[DemoManager.Instance.currentVisualization].Stop());
+
+        this.settingsPanelList[_index].StartCoroutine(this.settingsPanelList[_index].Initialize());
+
+        yield return null;
     }
 
     #endregion

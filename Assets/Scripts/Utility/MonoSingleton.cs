@@ -49,7 +49,9 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     }
 
 
+    protected bool isInitialized;
     protected bool isRunning;
+
     public abstract IEnumerator Initialize();
     public abstract IEnumerator Run();
     public abstract IEnumerator Stop();

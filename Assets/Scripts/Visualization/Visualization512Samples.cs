@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Visualization512Samples : VisualizationBase
 {
-    public Transform dynamicObjContainer;
+    public Transform parentContainer;
 
     public float minMinScale;
     public float maxMinScale;
@@ -27,8 +27,11 @@ public class Visualization512Samples : VisualizationBase
 
     public override IEnumerator Initialize()
     {
-        yield return this.canvas.StartCoroutine(this.canvas.Initialize());
+        this.isInitialized = true;
+
         yield return this.StartCoroutine(this.InstantiateCubes());
+
+        this.isInitialized = false;
 
         yield return null;
     }
@@ -37,8 +40,7 @@ public class Visualization512Samples : VisualizationBase
     {
         this.isRunning = true;
 
-        // Start canvas run routine
-        this.canvas.StartCoroutine(this.canvas.Run());
+        this.parentContainer.gameObject.SetActive(true);
 
         while (this.isRunning)
         {
@@ -53,6 +55,9 @@ public class Visualization512Samples : VisualizationBase
     public override IEnumerator Stop()
     {
         this.isRunning = false;
+
+        this.parentContainer.gameObject.SetActive(false);
+
         yield return null;
     }
 
@@ -72,7 +77,7 @@ public class Visualization512Samples : VisualizationBase
 
             // Instantiate cube
             ObjectInstantiater.Instance.StartCoroutine(ObjectInstantiater.Instance.InstantiatePrefab(
-                PrefabType.CubeVerticallyScaling, this.dynamicObjContainer, this.dynamicObjContainer.position, tempRotation, _obj => {
+                PrefabType.CubeVerticallyScaling, this.parentContainer, this.parentContainer.position, tempRotation, _obj => {
                     if (_obj != null)
                     {
                         this.cubeArray[i] = _obj;
