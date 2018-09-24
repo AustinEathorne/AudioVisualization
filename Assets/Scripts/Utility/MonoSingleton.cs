@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections;
 
-public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T instance;
 
@@ -46,4 +47,12 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
             }
         }
     }
+
+
+    protected bool isInitialized;
+    protected bool isRunning;
+
+    public abstract IEnumerator Initialize();
+    public abstract IEnumerator Run();
+    public abstract IEnumerator Stop();
 }

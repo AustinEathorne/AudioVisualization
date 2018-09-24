@@ -9,17 +9,20 @@ public class AudioPeer : MonoSingleton<AudioPeer>
     public float[] audioSamples = new float[512];
 
 
+    #region Main
 
-    public IEnumerator Initialize()
+    public override IEnumerator Initialize()
     {
         this.audioSource = AudioManager.Instance.audioSource;
 
         yield return null;
     }
 
-    public IEnumerator Run()
+    public override IEnumerator Run()
     {
-        while (Application.isPlaying)
+        this.isRunning = true;
+
+        while (this.isRunning)
         {
             yield return this.GetSpectrumData();
 
@@ -29,6 +32,15 @@ public class AudioPeer : MonoSingleton<AudioPeer>
         yield return null;
     }
 
+    public override IEnumerator Stop()
+    {
+        this.isRunning = false;
+        yield return null;
+    }
+
+    #endregion
+
+    #region Audio
 
     private IEnumerator GetSpectrumData()
     {
@@ -37,5 +49,5 @@ public class AudioPeer : MonoSingleton<AudioPeer>
         yield return null;
     }
 
-
+    #endregion
 }
