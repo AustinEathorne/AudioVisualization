@@ -8,11 +8,16 @@ public class AudioManager : MonoSingleton<AudioManager>
     // Members are public for editor scripts
     public AudioSource audioSource;
 
+    public List<AudioClip> songs;
+
 
     #region Main
 
     public override IEnumerator Initialize()
     {
+        // Set clip
+        this.audioSource.clip = this.songs[0];
+
         // Yield audio peer initialization
         yield return AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Initialize());
 
@@ -42,6 +47,19 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         this.isRunning = false;
         yield return null;
+    }
+
+    #endregion
+
+    #region Audio
+
+    public void ChangeSong(int _index)
+    {
+        this.audioSource.Stop();
+
+        this.audioSource.clip = this.songs[_index];
+
+        this.audioSource.Play();
     }
 
     #endregion

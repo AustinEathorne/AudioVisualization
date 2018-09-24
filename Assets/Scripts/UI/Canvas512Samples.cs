@@ -18,24 +18,12 @@ public class Canvas512Samples : CanvasBase
     public Slider scaleMultiplierSlider;
     public Text scaleMultiplierText;
 
+    [Header("Song")]
+    public Dropdown songDropdown;
+
     public override IEnumerator Initialize()
     {
-        this.minScaleSlider.minValue = this.visualization.minMinScale;
-        this.minScaleSlider.maxValue = this.visualization.maxMinScale;
-        this.minScaleSlider.value = this.visualization.minScale;
-        this.minScaleText.text = this.visualization.minScale.ToString();
-
-        this.maxScaleSlider.minValue = this.visualization.minMaxScale;
-        this.maxScaleSlider.maxValue = this.visualization.maxMaxScale;
-        this.maxScaleSlider.value = this.visualization.maxScale;
-        this.maxScaleText.text = this.visualization.maxScale.ToString();
-
-        this.scaleMultiplierSlider.minValue = this.visualization.minScaleMultiplier;
-        this.scaleMultiplierSlider.maxValue = this.visualization.maxScaleMultiplier;
-        this.scaleMultiplierSlider.value = this.visualization.scaleMultiplier;
-        this.scaleMultiplierText.text = this.visualization.scaleMultiplier.ToString();
-
-        yield return null;
+        yield return this.StartCoroutine(this.SetupUI());
     }
 
     public override IEnumerator Run()
@@ -74,9 +62,46 @@ public class Canvas512Samples : CanvasBase
         this.visualization.SetScaleMultiplier(_value);
     }
 
+    public void OnSongDropdownUpdate(int _index)
+    {
+        AudioManager.Instance.ChangeSong(_index);
+    }
+
     #endregion
 
     #region UI
+
+    public IEnumerator SetupUI()
+    {
+        this.minScaleSlider.minValue = this.visualization.minMinScale;
+        this.minScaleSlider.maxValue = this.visualization.maxMinScale;
+        this.minScaleSlider.value = this.visualization.minScale;
+        this.minScaleText.text = this.visualization.minScale.ToString();
+
+        this.maxScaleSlider.minValue = this.visualization.minMaxScale;
+        this.maxScaleSlider.maxValue = this.visualization.maxMaxScale;
+        this.maxScaleSlider.value = this.visualization.maxScale;
+        this.maxScaleText.text = this.visualization.maxScale.ToString();
+
+        this.scaleMultiplierSlider.minValue = this.visualization.minScaleMultiplier;
+        this.scaleMultiplierSlider.maxValue = this.visualization.maxScaleMultiplier;
+        this.scaleMultiplierSlider.value = this.visualization.scaleMultiplier;
+        this.scaleMultiplierText.text = this.visualization.scaleMultiplier.ToString();
+
+        List<Dropdown.OptionData> dataList = new List<Dropdown.OptionData>();
+
+        foreach (AudioClip clip in AudioManager.Instance.songs)
+        {
+            Dropdown.OptionData data = new Dropdown.OptionData();
+            data.text = clip.name;
+
+            dataList.Add(data);            
+        }
+
+        this.songDropdown.AddOptions(dataList);
+
+        yield return null;
+    }
 
     public void ToggleSettingsPanel()
     {
