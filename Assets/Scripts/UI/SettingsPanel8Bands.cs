@@ -74,5 +74,10 @@ public class SettingsPanel8Bands : SettingsPanelBase
         this.visualization.SetScaleMultiplier(_value);
     }
 
+    public void OnUseBandBufferToggle(bool _value)
+    {
+        this.visualization.isUsingBandBuffers = _value;
+    }
+
     #endregion
 }

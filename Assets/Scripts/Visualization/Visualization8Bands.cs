@@ -84,22 +84,25 @@ public class Visualization8Bands : VisualizationBase
 
             if (this.isUsingBandBuffers)
             {
-                scale = AudioPeer.Instance.bandBuffer[i] * this.scaleMultiplier < this.minScale ?
-                this.minScale : this.minScale + (AudioPeer.Instance.bandBuffer[i] * this.scaleMultiplier);
+                scale = AudioPeer.Instance.bandBufferNormalized[i] * this.scaleMultiplier < this.minScale ?
+                this.minScale : this.minScale + (AudioPeer.Instance.bandBufferNormalized[i] * this.scaleMultiplier);
+
+                float color = AudioPeer.Instance.bandBufferNormalized[i];
+                this.materialArray[i].SetColor("_EmissionColor", new Color(color, 0.0f, 1.0f));
             }
             else
             {
-                scale = AudioPeer.Instance.frequencyBands[i] * this.scaleMultiplier < this.minScale ?
-                this.minScale : this.minScale + (AudioPeer.Instance.frequencyBands[i] * this.scaleMultiplier);
+                scale = AudioPeer.Instance.frequencyBandNormalized[i] * this.scaleMultiplier < this.minScale ?
+                this.minScale : this.minScale + (AudioPeer.Instance.frequencyBandNormalized[i] * this.scaleMultiplier);
+
+                float color = AudioPeer.Instance.frequencyBandNormalized[i];
+                this.materialArray[i].SetColor("_EmissionColor", new Color(color, 0.0f, 1.0f));
             }
 
             scale = scale > this.maxScale ? this.maxScale : scale;
 
             this.cubeArray[i].transform.localScale = new Vector3(
                 this.cubeArray[i].transform.localScale.x, scale, this.cubeArray[i].transform.localScale.z);
-
-            float color = scale / this.maxScale;
-            this.materialArray[i].color = new Color(color, 0.5f, 0.0f);
         }
 
         yield return null;

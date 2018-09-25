@@ -10,18 +10,21 @@ public class AudioPeer : MonoSingleton<AudioPeer>
     public float[] audioSamples = new float[512];
 
     [Header("Bands")]
-    public float[] frequencyBands = new float[8];
-    int sampleId = 0;
-    int sampleCount = 0;
-    float averageFrequency = 0.0f;
+    private float[] frequencyBands = new float[8];
+    private int sampleId = 0;
+    private int sampleCount = 0;
+    private float averageFrequency = 0.0f;
 
     [Header("Buffer")]
     public float minBufferDecrease = 0.005f;
     public float bufferDecreaseMultiplier = 1.2f;
-    public float[] bandBuffer = new float[8];
-    public float[] bufferDecrease = new float[8];
+    private float[] bandBuffer = new float[8];
+    private float[] bufferDecrease = new float[8];
 
-
+    // 0 - 1 values
+    public float[] frequencyBandHighest = new float[8];
+    public float[] frequencyBandNormalized = new float[8];
+    public float[] bandBufferNormalized = new float[8];
 
     #region Main
 
@@ -39,8 +42,9 @@ public class AudioPeer : MonoSingleton<AudioPeer>
         while (this.isRunning)
         {
             yield return this.GetSpectrumData();
-            yield return this.MakeFrequencyBands();
+            yield return this.CreateFrequencyBands();
             yield return this.BufferBands();
+            yield return this.CreateNormalizedBands();
 
             yield return null;
         }
@@ -65,7 +69,7 @@ public class AudioPeer : MonoSingleton<AudioPeer>
         yield return null;
     }
 
-    private IEnumerator MakeFrequencyBands()
+    private IEnumerator CreateFrequencyBands()
     {
         /* 22050 / 512 = 43 hertz per sample
         
@@ -130,6 +134,24 @@ public class AudioPeer : MonoSingleton<AudioPeer>
                 this.bandBuffer[i] -= this.bufferDecrease[i];
                 this.bufferDecrease[i] *= this.bufferDecreaseMultiplier;
             }
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator CreateNormalizedBands()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            // Get the highest value for this frequency band
+            if (this.frequencyBands[i] > this.frequencyBandHighest[i])
+            {
+                this.frequencyBandHighest[i] = this.frequencyBands[i];
+            }
+
+            // Normalize values
+            this.frequencyBandNormalized[i] = this.frequencyBands[i] / this.frequencyBandHighest[i];
+            this.bandBufferNormalized[i] = this.bandBuffer[i] / this.frequencyBandHighest[i];
         }
 
         yield return null;
