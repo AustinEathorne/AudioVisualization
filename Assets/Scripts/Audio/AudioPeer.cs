@@ -16,21 +16,33 @@ public class AudioPeer : MonoSingleton<AudioPeer>
     private float averageFrequency = 0.0f;
 
     [Header("Buffer")]
-    public float minBufferDecrease = 0.005f;
-    public float bufferDecreaseMultiplier = 1.2f;
+    public float minBufferDecrease;
+    public float bufferDecreaseMultiplier;
     private float[] bandBuffer = new float[8];
     private float[] bufferDecrease = new float[8];
 
-    // 0 - 1 values
+    [Header("Useable Values")]
     public float[] frequencyBandHighest = new float[8];
     public float[] frequencyBandNormalized = new float[8];
     public float[] bandBufferNormalized = new float[8];
+
+    [Header("Amplitude")]
+    public float currentAmplitude = 0.0f;
+    public float currentAmplitudeBuffer = 0.0f;
+    private float amplitudeHighest = 0.0f;
+    private float amplitudeBufferHighest = 0.0f;
+
+    [Header("Profile")]
+    public float initialHighestFrequency;
+
 
     #region Main
 
     public override IEnumerator Initialize()
     {
         this.audioSource = AudioManager.Instance.audioSource;
+
+        yield return this.StartCoroutine(this.ResetValues());
 
         yield return null;
     }
@@ -41,10 +53,11 @@ public class AudioPeer : MonoSingleton<AudioPeer>
 
         while (this.isRunning)
         {
-            yield return this.GetSpectrumData();
-            yield return this.CreateFrequencyBands();
-            yield return this.BufferBands();
-            yield return this.CreateNormalizedBands();
+            this.StartCoroutine(this.GetSpectrumData());
+            this.StartCoroutine(this.CreateFrequencyBands());
+            this.StartCoroutine(this.BufferBands());
+            this.StartCoroutine(this.CreateNormalizedBands());
+            yield return this.StartCoroutine(this.GetAmplitude());
 
             yield return null;
         }
@@ -153,6 +166,47 @@ public class AudioPeer : MonoSingleton<AudioPeer>
             this.frequencyBandNormalized[i] = this.frequencyBands[i] / this.frequencyBandHighest[i];
             this.bandBufferNormalized[i] = this.bandBuffer[i] / this.frequencyBandHighest[i];
         }
+
+        yield return null;
+    }
+
+    private IEnumerator GetAmplitude()
+    {
+        float currAmp = 0.0f;
+        float currAmpBuffer = 0.0f;
+
+        for (int i = 0; i < 8; i++)
+        {
+            currAmp += this.frequencyBandNormalized[i];
+            currAmpBuffer += this.bandBufferNormalized[i];
+        }
+
+        if (currAmp > this.amplitudeHighest)
+        {
+            this.amplitudeHighest = currAmp;
+        }
+        if (currAmpBuffer > this.amplitudeBufferHighest)
+        {
+            this.amplitudeBufferHighest = currAmpBuffer;
+        }
+
+        this.currentAmplitude = currAmp / this.amplitudeHighest;
+        this.currentAmplitudeBuffer = currAmpBuffer / this.amplitudeBufferHighest;
+
+        yield return null;
+    }
+
+
+    public IEnumerator ResetValues()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            this.frequencyBandHighest[i] = this.initialHighestFrequency;
+        }
+
+        this.currentAmplitude = 0.0f;
+        this.currentAmplitudeBuffer = 0.0f;
+        this.amplitudeHighest = 0.5f;
 
         yield return null;
     }

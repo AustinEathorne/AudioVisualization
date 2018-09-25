@@ -61,6 +61,8 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         this.audioSource.Stop();
 
+        AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.ResetValues());
+
         this.audioSource.clip = this.songs[_index];
         this.audioSource.time = 0.0f;
 
