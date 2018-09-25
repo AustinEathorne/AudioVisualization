@@ -15,9 +15,9 @@ public class Visualization512Samples : VisualizationBase
     public float maxMaxScale;
     public float maxScale;
 
-    public float scaleMultiplier;
     public float minScaleMultiplier;
     public float maxScaleMultiplier;
+    public float scaleMultiplier;
 
     public GameObject[] cubeArray = new GameObject[512];
     public Material[] materialArray = new Material[512];
@@ -109,7 +109,8 @@ public class Visualization512Samples : VisualizationBase
             this.cubeArray[i].transform.localScale = new Vector3(1.0f, scale, 1.0f);
 
             float color = scale / this.maxScale;
-            this.materialArray[i].color = new Color(color, 0.5f, 0.0f);
+            //this.materialArray[i].color = new Color(color, 0.5f, 0.0f);
+            this.materialArray[i].SetColor("_EmissionColor", new Color(color, color, color));
         }
 
         yield return null;

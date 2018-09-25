@@ -31,11 +31,15 @@ public class DemoManager : MonoSingleton<DemoManager>
         yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.Initialize());
         yield return ObjectInstantiater.Instance.StartCoroutine(ObjectInstantiater.Instance.Initialize());
 
-        // Get and initilialize scene managers
+        // Initilialize and turn off scene managers
         foreach (VisualizationBase manager in this.visManagerList)
         {
             yield return manager.StartCoroutine(manager.Initialize());
+            yield return manager.StartCoroutine(manager.Stop());
+
         }
+
+
 
         this.isInitialized = true;
 
@@ -78,10 +82,12 @@ public class DemoManager : MonoSingleton<DemoManager>
 
     public IEnumerator ChangeVisualization(int _index)
     {
-        yield return new WaitUntil(() => this.isChangingVisualization == true);
+        yield return new WaitUntil(() => this.isChangingVisualization == false);
+
+        this.isChangingVisualization = true;
 
         // Pause audio
-        AudioManager.Instance.PauseMusic();
+        //AudioManager.Instance.PauseMusic();
 
         // Stop visualization thats running
         yield return this.visManagerList[this.currentVisualization].StartCoroutine(this.visManagerList[this.currentVisualization].Stop());
@@ -90,11 +96,13 @@ public class DemoManager : MonoSingleton<DemoManager>
         yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ChangeVisualization(_index));
 
         // Start new visualization
-        yield return this.visManagerList[_index].StartCoroutine(this.visManagerList[_index].Stop());
+        this.visManagerList[_index].StartCoroutine(this.visManagerList[_index].Run());
         this.currentVisualization = _index;
 
         // Play audio
-        AudioManager.Instance.PlayMusic();
+        //AudioManager.Instance.PlayMusic();
+
+        this.isChangingVisualization = false;
 
         yield return null;
     }

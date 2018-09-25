@@ -18,6 +18,8 @@ public class SettingsPanel512Samples : SettingsPanelBase
     public Text scaleMultiplierText;
 
 
+    #region Main
+
     public override IEnumerator Initialize()
     {
         this.minScaleSlider.minValue = this.visualization.minMinScale;
@@ -45,8 +47,11 @@ public class SettingsPanel512Samples : SettingsPanelBase
 
     public override IEnumerator Stop()
     {
-        throw new NotImplementedException();
+        this.settingsPanel.SetActive(false);
+        yield return null;
     }
+
+    #endregion
 
     #region Events
 
