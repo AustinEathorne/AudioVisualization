@@ -88,7 +88,7 @@ public class Visualization8Bands : VisualizationBase
                 this.minScale : this.minScale + (AudioPeer.Instance.bandBufferNormalized[i] * this.scaleMultiplier);
 
                 float color = AudioPeer.Instance.bandBufferNormalized[i];
-                this.materialArray[i].SetColor("_EmissionColor", new Color(color, 0.0f, 1.0f));
+                this.materialArray[i].SetColor("_EmissionColor", new Color(color, color, color));
             }
             else
             {
