@@ -1105,12 +1105,13 @@ MonoBehaviour:
   minMinScale: 0.1
   maxMinScale: 1
   minScale: 0.1
-  minMaxScale: 12
-  maxMaxScale: 25
-  maxScale: 20
-  scaleMultiplier: 20
+  minMaxScale: 10
+  maxMaxScale: 20
+  maxScale: 15
   minScaleMultiplier: 5
-  maxScaleMultiplier: 25
+  maxScaleMultiplier: 15
+  scaleMultiplier: 10
+  isUsingBandBuffers: 1
   cubeArray:
   - {fileID: 511449999}
   - {fileID: 1562763906}
@@ -1982,7 +1983,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 669123542}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -20, z: 50}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 511449998}
@@ -3782,9 +3783,9 @@ MonoBehaviour:
   minMaxScale: 150
   maxMaxScale: 300
   maxScale: 200
-  scaleMultiplier: 1000
   minScaleMultiplier: 500
   maxScaleMultiplier: 10000
+  scaleMultiplier: 1000
   cubeArray:
   - {fileID: 0}
   - {fileID: 0}
@@ -8292,6 +8293,26 @@ MonoBehaviour:
   - 0
   - 0
   frequencyBands:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  minBufferDecrease: 0.005
+  bufferDecreaseMultiplier: 1.2
+  bandBuffer:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  bufferDecrease:
   - 0
   - 0
   - 0

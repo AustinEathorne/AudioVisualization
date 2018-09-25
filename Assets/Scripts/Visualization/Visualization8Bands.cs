@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Visualization8Bands : VisualizationBase
 {
+    [Header("Container")]
     public Transform parentContainer;
 
+    [Header("Scale")]
     public float minMinScale;
     public float maxMinScale;
     public float minScale;
@@ -18,6 +20,10 @@ public class Visualization8Bands : VisualizationBase
     public float maxScaleMultiplier;
     public float scaleMultiplier;
 
+    [Header("Buffer")]
+    public bool isUsingBandBuffers;
+
+    [Header("Cubes")]
     public GameObject[] cubeArray = new GameObject[8];
     public Material[] materialArray = new Material[8];
 
@@ -76,8 +82,16 @@ public class Visualization8Bands : VisualizationBase
             if (this.cubeArray[i] == null)
                 continue;
 
-            scale = AudioPeer.Instance.frequencyBands[i] * this.scaleMultiplier < this.minScale ?
+            if (this.isUsingBandBuffers)
+            {
+                scale = AudioPeer.Instance.bandBuffer[i] * this.scaleMultiplier < this.minScale ?
+                this.minScale : this.minScale + (AudioPeer.Instance.bandBuffer[i] * this.scaleMultiplier);
+            }
+            else
+            {
+                scale = AudioPeer.Instance.frequencyBands[i] * this.scaleMultiplier < this.minScale ?
                 this.minScale : this.minScale + (AudioPeer.Instance.frequencyBands[i] * this.scaleMultiplier);
+            }
 
             scale = scale > this.maxScale ? this.maxScale : scale;
 

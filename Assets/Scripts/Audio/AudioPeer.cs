@@ -6,12 +6,22 @@ public class AudioPeer : MonoSingleton<AudioPeer>
 {
     private AudioSource audioSource;
 
+    [Header("Samples")]
     public float[] audioSamples = new float[512];
 
+    [Header("Bands")]
     public float[] frequencyBands = new float[8];
     int sampleId = 0;
     int sampleCount = 0;
     float averageFrequency = 0.0f;
+
+    [Header("Buffer")]
+    public float minBufferDecrease = 0.005f;
+    public float bufferDecreaseMultiplier = 1.2f;
+    public float[] bandBuffer = new float[8];
+    public float[] bufferDecrease = new float[8];
+
+
 
     #region Main
 
@@ -30,6 +40,7 @@ public class AudioPeer : MonoSingleton<AudioPeer>
         {
             yield return this.GetSpectrumData();
             yield return this.MakeFrequencyBands();
+            yield return this.BufferBands();
 
             yield return null;
         }
@@ -100,6 +111,25 @@ public class AudioPeer : MonoSingleton<AudioPeer>
             this.averageFrequency /= sampleId;
 
             this.frequencyBands[i] = this.averageFrequency;
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator BufferBands()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (frequencyBands[i] > bandBuffer[i])
+            {
+                this.bandBuffer[i] = this.frequencyBands[i];
+                this.bufferDecrease[i] = this.minBufferDecrease;
+            }
+            else if (frequencyBands[i] < bandBuffer[i])
+            {
+                this.bandBuffer[i] -= this.bufferDecrease[i];
+                this.bufferDecrease[i] *= this.bufferDecreaseMultiplier;
+            }
         }
 
         yield return null;
