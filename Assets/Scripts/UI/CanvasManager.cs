@@ -19,7 +19,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("Settings Panels")]
     public List<SettingsPanelBase> settingsPanelList;
 
-
+    [Header("Volume")]
+    public GameObject volumePanel;
+    public Slider volumeSlider;
 
     #region Main
 
@@ -92,6 +94,28 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         AudioManager.Instance.SetStereoPan((Channel) _channel);
     }
 
+    public void OnPlayClick()
+    {
+        if (AudioManager.Instance.audioSource.isPlaying)
+        {
+            AudioManager.Instance.PauseMusic();
+        }
+        else
+        {
+            AudioManager.Instance.PlayMusic();
+        }
+    }
+
+    public void OnVolumeClick()
+    {
+        this.volumePanel.SetActive(!this.volumePanel.activeSelf);
+    }
+
+    public void OnVolumeUpdate(float _value)
+    {
+        AudioManager.Instance.SetVolume(_value);
+    }
+
     #endregion
 
     #region UI
@@ -114,6 +138,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         // Search bar
         this.searchBar.maxValue = AudioManager.Instance.songs[0].length;
         this.searchBar.value = 0.0f;
+
+        // Volume
+        this.volumeSlider.value = AudioManager.Instance.audioSource.volume;
 
         // Settings panel
         yield return this.settingsPanelList[0].StartCoroutine(this.settingsPanelList[0].Initialize());

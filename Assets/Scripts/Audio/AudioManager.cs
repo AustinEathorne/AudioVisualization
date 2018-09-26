@@ -105,5 +105,10 @@ public class AudioManager : MonoSingleton<AudioManager>
         }
     }
 
+    public void SetVolume(float _value)
+    {
+        this.audioSource.volume = _value;
+    }
+
     #endregion
 }
