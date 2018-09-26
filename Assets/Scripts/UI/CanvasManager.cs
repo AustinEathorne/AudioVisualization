@@ -92,6 +92,18 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         AudioManager.Instance.SetStereoPan((Channel) _channel);
     }
 
+    public void OnPlayClick()
+    {
+        if (AudioManager.Instance.audioSource.isPlaying)
+        {
+            AudioManager.Instance.PauseMusic();
+        }
+        else
+        {
+            AudioManager.Instance.PlayMusic();
+        }
+    }
+
     #endregion
 
     #region UI
