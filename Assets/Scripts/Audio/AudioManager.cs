@@ -84,5 +84,26 @@ public class AudioManager : MonoSingleton<AudioManager>
         this.audioSource.time = _time;
     }
 
+    public void SetStereoPan(Channel _channel)
+    {
+        switch (_channel)
+        {
+            case Channel.Stereo:
+                this.audioSource.panStereo = 0;
+                break;
+
+            case Channel.Left:
+                this.audioSource.panStereo = -1;
+                break;
+
+            case Channel.Right:
+                this.audioSource.panStereo = 1;
+                break;
+
+            default:
+                break;
+        }
+    }
+
     #endregion
 }

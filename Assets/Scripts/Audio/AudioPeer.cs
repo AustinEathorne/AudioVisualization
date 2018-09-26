@@ -7,7 +7,8 @@ public class AudioPeer : MonoSingleton<AudioPeer>
     private AudioSource audioSource;
 
     [Header("Samples")]
-    public float[] audioSamples = new float[512];
+    public float[] samplesLeft = new float[512];
+    public float[] samplesRight = new float[512];
 
     [Header("Bands")]
     private float[] frequencyBands = new float[8];
@@ -34,6 +35,10 @@ public class AudioPeer : MonoSingleton<AudioPeer>
 
     [Header("Profile")]
     public float initialHighestFrequency;
+
+    [Header("Channel")]
+    public Channel channel;
+
 
 
     #region Main
@@ -77,7 +82,8 @@ public class AudioPeer : MonoSingleton<AudioPeer>
 
     private IEnumerator GetSpectrumData()
     {
-        this.audioSource.GetSpectrumData(this.audioSamples, 0, FFTWindow.Blackman);
+        this.audioSource.GetSpectrumData(this.samplesLeft, 0, FFTWindow.Blackman);
+        this.audioSource.GetSpectrumData(this.samplesRight, 1, FFTWindow.Blackman);
 
         yield return null;
     }
@@ -121,7 +127,24 @@ public class AudioPeer : MonoSingleton<AudioPeer>
             this.averageFrequency = 0.0f;
             for (int j = 0; j < sampleCount; j++)
             {
-                this.averageFrequency += this.audioSamples[sampleId] * (sampleId + 1);
+                switch (this.channel)
+                {
+                    case Channel.Stereo:
+                        this.averageFrequency += ((this.samplesLeft[sampleId] + this.samplesRight[sampleId]) * 0.5f) * (sampleId + 1);
+                        break;
+
+                    case Channel.Left:
+                        this.averageFrequency += this.samplesLeft[sampleId] * (sampleId + 1);
+                        break;
+
+                    case Channel.Right:
+                        this.averageFrequency += this.samplesRight[sampleId] * (sampleId + 1);
+                        break;
+
+                    default:
+                        break;
+                }
+
                 sampleId++;
             }
 
@@ -212,4 +235,9 @@ public class AudioPeer : MonoSingleton<AudioPeer>
     }
 
     #endregion
+}
+
+public enum Channel
+{
+    Stereo = 0, Left, Right
 }

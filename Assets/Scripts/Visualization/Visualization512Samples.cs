@@ -7,6 +7,8 @@ public class Visualization512Samples : VisualizationBase
 {
     public Transform parentContainer;
 
+    public Channel channel;
+
     public float minMinScale;
     public float maxMinScale;
     public float minScale;
@@ -101,8 +103,26 @@ public class Visualization512Samples : VisualizationBase
             if (this.cubeArray[i] == null)
                 continue;
 
-            scale = AudioPeer.Instance.audioSamples[i] * this.scaleMultiplier < this.minScale ? 
-                this.minScale : this.minScale + (AudioPeer.Instance.audioSamples[i] * this.scaleMultiplier);
+            switch(this.channel)
+            {
+                case Channel.Stereo:
+                    scale = ((AudioPeer.Instance.samplesLeft[i] + AudioPeer.Instance.samplesRight[i]) * 0.5f) * this.scaleMultiplier < this.minScale ?
+                        this.minScale : this.minScale + ((AudioPeer.Instance.samplesLeft[i] + AudioPeer.Instance.samplesRight[i]) * 0.5f) * this.scaleMultiplier;
+                    break;
+
+                case Channel.Left:
+                    scale = AudioPeer.Instance.samplesLeft[i] * this.scaleMultiplier < this.minScale ?
+                        this.minScale : this.minScale + (AudioPeer.Instance.samplesLeft[i] * this.scaleMultiplier);
+                    break;
+
+                case Channel.Right:
+                    scale = AudioPeer.Instance.samplesRight[i] * this.scaleMultiplier < this.minScale ?
+                        this.minScale : this.minScale + (AudioPeer.Instance.samplesRight[i] * this.scaleMultiplier);
+                    break;
+                    
+                default:
+                    break;
+            }
 
             scale = scale > this.maxScale ? this.maxScale : scale;
 

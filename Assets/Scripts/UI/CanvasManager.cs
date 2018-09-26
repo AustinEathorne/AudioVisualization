@@ -86,6 +86,12 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.ChangeVisualization(_index));
     }
 
+    public void OnChannelSelect(int _channel)
+    {
+        AudioPeer.Instance.channel = (Channel)_channel;
+        AudioManager.Instance.SetStereoPan((Channel) _channel);
+    }
+
     #endregion
 
     #region UI

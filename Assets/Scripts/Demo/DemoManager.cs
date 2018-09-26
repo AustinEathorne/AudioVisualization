@@ -86,9 +86,6 @@ public class DemoManager : MonoSingleton<DemoManager>
 
         this.isChangingVisualization = true;
 
-        // Pause audio
-        //AudioManager.Instance.PauseMusic();
-
         // Stop visualization thats running
         yield return this.visManagerList[this.currentVisualization].StartCoroutine(this.visManagerList[this.currentVisualization].Stop());
 
@@ -98,9 +95,6 @@ public class DemoManager : MonoSingleton<DemoManager>
         // Start new visualization
         this.visManagerList[_index].StartCoroutine(this.visManagerList[_index].Run());
         this.currentVisualization = _index;
-
-        // Play audio
-        //AudioManager.Instance.PlayMusic();
 
         this.isChangingVisualization = false;
 
