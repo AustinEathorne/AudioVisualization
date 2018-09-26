@@ -88,14 +88,12 @@ public class Visualization64Bands : VisualizationBase
                     if (_obj != null)
                     {
                         this.cubeArray[i] = _obj;
-                        this.materialArray[i] = _obj.GetComponent<MeshRenderer>().material;
+                        this.materialArray[i] = _obj.GetComponentInChildren<MeshRenderer>().material;
                     }
                 }));
 
             this.cubeArray[i].transform.localPosition = new Vector3(xPosition, 0, 0);
             xPosition += offset;
-
-            this.materialArray[i] = this.cubeArray[i].GetComponent<MeshRenderer>().material;
         }
 
         yield return null;

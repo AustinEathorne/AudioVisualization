@@ -83,7 +83,7 @@ public class Visualization512Samples : VisualizationBase
                     if (_obj != null)
                     {
                         this.cubeArray[i] = _obj;
-                        this.materialArray[i] = _obj.GetComponent<MeshRenderer>().material;
+                        this.materialArray[i] = _obj.GetComponentInChildren<MeshRenderer>().material;
                     }
                 }));
 

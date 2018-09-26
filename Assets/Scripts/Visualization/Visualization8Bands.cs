@@ -36,7 +36,7 @@ public class Visualization8Bands : VisualizationBase
 
         for (int i = 0; i < this.cubeArray.Length; i++)
         {
-            this.materialArray[i] = this.cubeArray[i].GetComponent<MeshRenderer>().material;
+            this.materialArray[i] = this.cubeArray[i].GetComponentInChildren<MeshRenderer>().material;
         }
 
         this.isInitialized = false;
