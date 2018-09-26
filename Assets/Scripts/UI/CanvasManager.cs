@@ -122,6 +122,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public IEnumerator SetupUI()
     {
+        // Visualization dropdown
+        this.visualizationDropdown.value = DemoManager.Instance.currentVisualization;
+
         // Song dropdown
         List<Dropdown.OptionData> dataList = new List<Dropdown.OptionData>();
 
@@ -143,7 +146,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.volumeSlider.value = AudioManager.Instance.audioSource.volume;
 
         // Settings panel
-        yield return this.settingsPanelList[0].StartCoroutine(this.settingsPanelList[0].Initialize());
+        yield return this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(this.settingsPanelList[DemoManager.Instance.currentVisualization].Initialize());
 
         yield return null;
     }

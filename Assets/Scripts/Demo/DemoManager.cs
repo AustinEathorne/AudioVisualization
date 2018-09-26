@@ -55,8 +55,7 @@ public class DemoManager : MonoSingleton<DemoManager>
         CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.Run());
 
         // Run first visualization manager
-        this.visManagerList[0].StartCoroutine(this.visManagerList[0].Run());
-        this.currentVisualization = 0;
+        this.visManagerList[this.currentVisualization].StartCoroutine(this.visManagerList[this.currentVisualization].Run());
 
         while (this.isRunning)
         {

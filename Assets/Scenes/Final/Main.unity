@@ -12898,7 +12898,7 @@ MonoBehaviour:
   - {fileID: 414405919}
   - {fileID: 831963158}
   - {fileID: 502388867}
-  currentVisualization: 0
+  currentVisualization: 3
   isChangingVisualization: 0
 --- !u!1 &1235746949
 GameObject:
