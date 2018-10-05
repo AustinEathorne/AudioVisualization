@@ -1681,7 +1681,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.469
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3538,7 +3538,16 @@ MonoBehaviour:
   - {fileID: 414405918}
   - {fileID: 831963157}
   - {fileID: 502388866}
-  volumePanel: {fileID: 1667420636}
+  volumeImageThresholds:
+  - 0.3
+  - 0.6
+  - 1
+  volumeSpriteList:
+  - {fileID: 21300000, guid: 45bed78b5307b574c8709d43e29706aa, type: 3}
+  - {fileID: 21300000, guid: 7467f4638220ae948a751af7bd882e1e, type: 3}
+  - {fileID: 21300000, guid: ed60bd022eb80fb4ea0bb4fdeff672ed, type: 3}
+  - {fileID: 21300000, guid: 22450b2eb9b6f56409988e9d5fe87a18, type: 3}
+  volumeImage: {fileID: 1247474501}
   volumeSlider: {fileID: 203477143}
 --- !u!1 &433345356
 GameObject:

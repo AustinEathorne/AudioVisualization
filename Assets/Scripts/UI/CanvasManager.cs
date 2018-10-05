@@ -20,7 +20,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public List<SettingsPanelBase> settingsPanelList;
 
     [Header("Volume")]
-    public GameObject volumePanel;
+    public float[] volumeImageThresholds = new float[3];
+    public List<Sprite> volumeSpriteList;
+    public Image volumeImage;
     public Slider volumeSlider;
 
     #region Main
@@ -108,12 +110,17 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnVolumeClick()
     {
-        this.volumePanel.SetActive(!this.volumePanel.activeSelf);
+        AudioManager.Instance.audioSource.mute = !AudioManager.Instance.audioSource.mute;
+        this.SetVolumeSprite();
     }
 
     public void OnVolumeUpdate(float _value)
     {
+        // Update volume
         AudioManager.Instance.SetVolume(_value);
+
+        // Update volume image
+        this.SetVolumeSprite();
     }
 
     #endregion
@@ -144,6 +151,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
         // Volume
         this.volumeSlider.value = AudioManager.Instance.audioSource.volume;
+        this.SetVolumeSprite();
 
         // Settings panel
         yield return this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(this.settingsPanelList[DemoManager.Instance.currentVisualization].Initialize());
@@ -191,6 +199,26 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.settingsPanelList[_index].StartCoroutine(this.settingsPanelList[_index].Initialize());
 
         yield return null;
+    }
+
+    public void SetVolumeSprite()
+    {
+        // Check if the audio is muted
+        if (AudioManager.Instance.audioSource.mute)
+        {
+            this.volumeImage.sprite = this.volumeSpriteList[0];
+            return;
+        }
+
+        float volume = AudioManager.Instance.audioSource.volume;
+        for (int i = 0; i < this.volumeImageThresholds.Length; i++)
+        {
+            if (volume <= this.volumeImageThresholds[i])
+            {
+                this.volumeImage.sprite = this.volumeSpriteList[i + 1]; // 0 is volume mute
+                i = this.volumeImageThresholds.Length;
+            }
+        }
     }
 
     #endregion
