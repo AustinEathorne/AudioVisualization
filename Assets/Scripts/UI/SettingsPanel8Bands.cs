@@ -38,17 +38,21 @@ public class SettingsPanel8Bands : SettingsPanelBase
         this.scaleMultiplierSlider.value = this.visualization.scaleMultiplier;
         this.scaleMultiplierText.text = this.visualization.scaleMultiplier.ToString();
 
-        if (AudioManager.Instance.audioSource.panStereo == 0)
+        // TODO: remove temp check
+        if (this.channelDropdown)
         {
-            this.channelDropdown.value = 0;
-        }
-        else if (AudioManager.Instance.audioSource.panStereo == -1)
-        {
-            this.channelDropdown.value = 1;
-        }
-        else
-        {
-            this.channelDropdown.value = 2;
+            if (AudioManager.Instance.audioSource.panStereo == 0)
+            {
+                this.channelDropdown.value = 0;
+            }
+            else if (AudioManager.Instance.audioSource.panStereo == -1)
+            {
+                this.channelDropdown.value = 1;
+            }
+            else
+            {
+                this.channelDropdown.value = 2;
+            }
         }
 
         yield return null;
