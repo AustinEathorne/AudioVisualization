@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoSingleton<CanvasManager>
 {
-    [Header("Song")]
-    public Dropdown songDropdown;
-
     [Header("SidePanels")]
     public GameObject visualizationPanel;
     public GameObject libraryPanel;
@@ -37,6 +34,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public List<Sprite> volumeSpriteList;
     public Image volumeImage;
     public Slider volumeSlider;
+
+    [Header("Song Select")]
+    public RectTransform songSelectContainer;
+    public List<GameObject> songSelectButtonList;
+    public List<Text> songSelectTextList;
 
     [Header("Escape Container")]
     public GameObject escapeContainer;
@@ -97,11 +99,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.StartCoroutine(this.ToggleLibraryPanel());
     }
 
-    public void OnSongDropdownUpdate(int _index)
-    {
-        AudioManager.Instance.ChangeSong(_index);
-        this.ResetSearchBar();
-    }
 
     public void OnSearchBarSelect()
     {
@@ -113,10 +110,12 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.isSearching = false;
     }
 
+
     public void OnVisualizationSelectClick(int _index)
     {
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.ChangeVisualization(_index));
     }
+
 
     public void OnPlayClick()
     {
@@ -147,14 +146,23 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.SetVolumeSprite();
     }
 
+
     public void OnQuitClick()
     {
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.Quit());
     }
 
-    public void OnSongSelectClick()
-    {
 
+    public void OnFilePathUpdate(string _filePath)
+    {
+        DemoManager.Instance.StartCoroutine(DemoManager.Instance.LoadFiles(_filePath));
+    }
+
+    public void OnSongSelectClick(int _index)
+    {
+        Debug.Log("Select Song: " + _index.ToString());
+        AudioManager.Instance.ChangeSong(_index);
+        this.ResetSearchBar();
     }
 
     #endregion
@@ -163,19 +171,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public IEnumerator SetupUI()
     {
-        // Song dropdown
-        List<Dropdown.OptionData> dataList = new List<Dropdown.OptionData>();
-
-        foreach (AudioClip clip in AudioManager.Instance.songs)
-        {
-            Dropdown.OptionData data = new Dropdown.OptionData();
-            data.text = clip.name;
-
-            dataList.Add(data);            
-        }
-
-        this.songDropdown.AddOptions(dataList);
-
         // Search bar
         this.searchBar.maxValue = AudioManager.Instance.songs[0].length;
         this.searchBar.value = 0.0f;
@@ -214,7 +209,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void ResetSearchBar()
     {
-        this.searchBar.maxValue = AudioManager.Instance.songs[this.songDropdown.value].length;
+        this.searchBar.maxValue = AudioManager.Instance.songs[AudioManager.Instance.currentSong].length;
         this.searchBar.value = 0.0f;
     }
 
@@ -361,6 +356,41 @@ public class CanvasManager : MonoSingleton<CanvasManager>
             this.settingsPanelList[DemoManager.Instance.currentVisualization].Stop());
 
         this.settingsPanelList[_index].StartCoroutine(this.settingsPanelList[_index].Initialize());
+
+        yield return null;
+    }
+
+
+    public IEnumerator ClearSongSelection()
+    {
+        foreach (GameObject obj in this.songSelectButtonList)
+        {
+            ObjectPoolManager.Instance.ReturnObject(PooledObject.SongSelectButton, obj);
+        }
+
+        this.songSelectButtonList.Clear();
+
+        yield return null;
+    }
+
+    public IEnumerator AddSongSelectButton(string _songTitle)
+    {
+        // Get new song select button and its text component
+        this.songSelectButtonList.Add(ObjectPoolManager.Instance.GetPooledObject(PooledObject.SongSelectButton));
+        this.songSelectTextList.Add(this.songSelectButtonList[this.songSelectButtonList.Count - 1].GetComponentInChildren<Text>());
+
+        // Set position and scale
+        RectTransform rt = this.songSelectButtonList[this.songSelectButtonList.Count - 1].GetComponent<RectTransform>();
+        rt.SetParent(this.songSelectContainer);
+        rt.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+        // Set text
+        this.songSelectTextList[this.songSelectTextList.Count - 1].text = _songTitle;
+
+        // Update button OnClick event
+        Button button = this.songSelectButtonList[this.songSelectButtonList.Count - 1].GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => this.OnSongSelectClick(this.songSelectButtonList.Count - 1));
 
         yield return null;
     }

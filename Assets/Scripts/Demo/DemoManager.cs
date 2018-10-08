@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class DemoManager : MonoSingleton<DemoManager>
@@ -30,16 +31,15 @@ public class DemoManager : MonoSingleton<DemoManager>
         yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.Initialize());
         yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.Initialize());
         yield return ObjectInstantiater.Instance.StartCoroutine(ObjectInstantiater.Instance.Initialize());
+        yield return ObjectPoolManager.Instance.StartCoroutine(ObjectPoolManager.Instance.CreatePools());
 
-        // Initilialize and turn off scene managers
+        // Initilialize and turn off visualization managers
         foreach (VisualizationBase manager in this.visManagerList)
         {
             yield return manager.StartCoroutine(manager.Initialize());
             yield return manager.StartCoroutine(manager.Stop());
 
         }
-
-
 
         this.isInitialized = true;
 
@@ -54,12 +54,12 @@ public class DemoManager : MonoSingleton<DemoManager>
         AudioManager.Instance.StartCoroutine(AudioManager.Instance.Run());
         CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.Run());
 
-        // Run first visualization manager
+        // Run current visualization manager
         this.visManagerList[this.currentVisualization].StartCoroutine(this.visManagerList[this.currentVisualization].Run());
 
         while (this.isRunning)
         {
-            if (this.CheckForExcapeInput())
+            if (this.CheckForEscapeInput())
             {
                 CanvasManager.Instance.ToggleEscapeContainer();
             }
@@ -72,13 +72,14 @@ public class DemoManager : MonoSingleton<DemoManager>
 
     public override IEnumerator Stop()
     {
-        this.isRunning = false;
+        // Stop visualization thats running
+        yield return this.visManagerList[this.currentVisualization].StartCoroutine(this.visManagerList[this.currentVisualization].Stop());
 
         // Stop other singleton managers
         yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.Stop());
         yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.Stop());
 
-        
+        this.isRunning = false;
 
         yield return null;
     }
@@ -121,7 +122,7 @@ public class DemoManager : MonoSingleton<DemoManager>
 
     #region Input
 
-    public bool CheckForExcapeInput()
+    public bool CheckForEscapeInput()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -129,6 +130,39 @@ public class DemoManager : MonoSingleton<DemoManager>
         }
 
         return false;
+    }
+
+    #endregion
+
+    #region File
+
+    public IEnumerator LoadFiles(string _filepath)
+    {
+        // Stop everything
+        //yield return this.StartCoroutine(this.Stop());
+
+        // Get all mp3 file paths
+        string[] filePaths = Directory.GetFiles(_filepath, "*.WAV");
+
+        AudioManager.Instance.songs.Clear();
+        yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ClearSongSelection());
+
+        foreach (string path in filePaths)
+        {
+            // Get & create audio clip
+            WWW request = new WWW(path);
+            yield return request;
+
+            AudioManager.Instance.songs.Add(request.GetAudioClip());
+
+            Debug.Log("Path: " + path);
+            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(path));
+        }
+
+        // Re-start run routine
+        //this.StartCoroutine(this.Run());
+
+        yield return null;
     }
 
     #endregion

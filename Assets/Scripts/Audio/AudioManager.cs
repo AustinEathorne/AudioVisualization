@@ -10,6 +10,7 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public List<AudioClip> songs;
 
+    public int currentSong = 0;
 
     #region Main
 
@@ -56,8 +57,9 @@ public class AudioManager : MonoSingleton<AudioManager>
     public override IEnumerator Stop()
     {
         this.audioSource.Stop();
-
+        AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Stop());
         this.isRunning = false;
+
         yield return null;
     }
 
@@ -73,6 +75,8 @@ public class AudioManager : MonoSingleton<AudioManager>
 
         this.audioSource.clip = this.songs[_index];
         this.audioSource.time = 0.0f;
+
+        this.currentSong = _index;
 
         this.audioSource.Play();
     }
