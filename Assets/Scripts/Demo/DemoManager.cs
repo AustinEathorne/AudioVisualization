@@ -59,7 +59,11 @@ public class DemoManager : MonoSingleton<DemoManager>
 
         while (this.isRunning)
         {
-            
+            if (this.CheckForExcapeInput())
+            {
+                CanvasManager.Instance.ToggleEscapeContainer();
+            }
+
             yield return null;
         }
 
@@ -71,6 +75,19 @@ public class DemoManager : MonoSingleton<DemoManager>
         this.isRunning = false;
 
         // Stop other singleton managers
+        yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.Stop());
+        yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.Stop());
+
+        
+
+        yield return null;
+    }
+
+    public IEnumerator Quit()
+    {
+        yield return this.StartCoroutine(this.Stop());
+
+        Application.Quit();
 
         yield return null;
     }
@@ -98,6 +115,20 @@ public class DemoManager : MonoSingleton<DemoManager>
         this.isChangingVisualization = false;
 
         yield return null;
+    }
+
+    #endregion
+
+    #region Input
+
+    public bool CheckForExcapeInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

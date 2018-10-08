@@ -32,6 +32,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public Image volumeImage;
     public Slider volumeSlider;
 
+    [Header("Escape Container")]
+    public GameObject escapeContainer;
+
     #region Main
 
     public override IEnumerator Initialize()
@@ -132,6 +135,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
         // Update volume image
         this.SetVolumeSprite();
+    }
+
+    public void OnQuitClick()
+    {
+        DemoManager.Instance.StartCoroutine(DemoManager.Instance.Quit());
     }
 
     #endregion
@@ -251,6 +259,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         int seconds = Mathf.FloorToInt(time - minutes * 60);
 
         this.timeText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+    }
+
+    public void ToggleEscapeContainer()
+    {
+        this.escapeContainer.SetActive(!this.escapeContainer.activeSelf);
     }
 
     #endregion

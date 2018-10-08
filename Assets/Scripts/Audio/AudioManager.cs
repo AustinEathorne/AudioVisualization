@@ -55,6 +55,8 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public override IEnumerator Stop()
     {
+        this.audioSource.Stop();
+
         this.isRunning = false;
         yield return null;
     }
