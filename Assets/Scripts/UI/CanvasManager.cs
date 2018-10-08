@@ -316,33 +316,35 @@ public class CanvasManager : MonoSingleton<CanvasManager>
             // Fade out not selected buttons
             for (int i = 0; i < this.sideButtonImages.Count; i++)
             {
+                this.sideButtonTransforms[i].GetComponent<Button>().interactable = false;
+
                 if (i == _selectedButton)
                     continue;
 
-                if (i == this.sideButtonImages.Count - 1)
-                    yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 0.0f));
-                else
-                    UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 0.0f));
+                yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 0.0f));
             }
 
             // move selected button to selected position
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.MoveTransformOverTime(this.sideButtonTransforms[_selectedButton], this.sideButtonPositions[0], this.sideButtonMoveTime));
+
+            this.sideButtonTransforms[_selectedButton].GetComponent<Button>().interactable = true;
         }
         else
         {
+            this.sideButtonTransforms[_selectedButton].GetComponent<Button>().interactable = false;
+
             // Move selected button back to original position
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.MoveTransformOverTime(this.sideButtonTransforms[_selectedButton], this.sideButtonPositions[_selectedButton], this.sideButtonMoveTime));
 
             // Fade in not selected buttons
             for (int i = 0; i < this.sideButtonImages.Count; i++)
             {
-                if (i == _selectedButton)
-                    continue;
-
-                if (i == this.sideButtonImages.Count - 1)
+                if (i != _selectedButton)
+                {
                     yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 1.0f));
-                else
-                    UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 1.0f));
+                }
+
+                this.sideButtonTransforms[i].GetComponent<Button>().interactable = true;
             }
         }
 
