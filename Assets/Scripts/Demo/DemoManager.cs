@@ -147,6 +147,8 @@ public class DemoManager : MonoSingleton<DemoManager>
         AudioManager.Instance.songs.Clear();
         yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ClearSongSelection());
 
+        int count = 0;
+
         foreach (string path in filePaths)
         {
             // Get & create audio clip
@@ -156,7 +158,8 @@ public class DemoManager : MonoSingleton<DemoManager>
             AudioManager.Instance.songs.Add(request.GetAudioClip());
 
             Debug.Log("Path: " + path);
-            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(path));
+            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(count, path));
+            count++;
         }
 
         // Re-start run routine

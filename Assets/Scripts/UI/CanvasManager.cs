@@ -373,24 +373,26 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         yield return null;
     }
 
-    public IEnumerator AddSongSelectButton(string _songTitle)
+    public IEnumerator AddSongSelectButton(int _index, string _songTitle)
     {
         // Get new song select button and its text component
         this.songSelectButtonList.Add(ObjectPoolManager.Instance.GetPooledObject(PooledObject.SongSelectButton));
-        this.songSelectTextList.Add(this.songSelectButtonList[this.songSelectButtonList.Count - 1].GetComponentInChildren<Text>());
+        this.songSelectTextList.Add(this.songSelectButtonList[_index].GetComponentInChildren<Text>());
 
         // Set position and scale
-        RectTransform rt = this.songSelectButtonList[this.songSelectButtonList.Count - 1].GetComponent<RectTransform>();
+        RectTransform rt = this.songSelectButtonList[_index].GetComponent<RectTransform>();
         rt.SetParent(this.songSelectContainer);
         rt.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
         // Set text
-        this.songSelectTextList[this.songSelectTextList.Count - 1].text = _songTitle;
+        this.songSelectTextList[_index].text = _songTitle;
 
         // Update button OnClick event
-        Button button = this.songSelectButtonList[this.songSelectButtonList.Count - 1].GetComponent<Button>();
+        Button button = this.songSelectButtonList[_index].GetComponent<Button>();
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => this.OnSongSelectClick(this.songSelectButtonList.Count - 1));
+        button.onClick.AddListener(() => this.OnSongSelectClick(_index));
+
+        Debug.Log("Added button for song: " + _index.ToString());
 
         yield return null;
     }
