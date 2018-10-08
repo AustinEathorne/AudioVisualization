@@ -40,7 +40,13 @@ public class AudioManager : MonoSingleton<AudioManager>
 
         while (this.isRunning)
         {
-            
+            if(this.CheckForSongEnd())
+            {
+                this.audioSource.Stop();
+                this.audioSource.time = 0.0f;
+                CanvasManager.Instance.SetPlayButtonSprite();
+            }
+
             yield return null;
         }
 
@@ -111,6 +117,16 @@ public class AudioManager : MonoSingleton<AudioManager>
     public void SetVolume(float _value)
     {
         this.audioSource.volume = _value;
+    }
+
+    public bool CheckForSongEnd()
+    {
+        if (this.audioSource.time >= this.audioSource.clip.length)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

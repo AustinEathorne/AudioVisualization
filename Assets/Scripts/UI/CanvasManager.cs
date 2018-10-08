@@ -9,15 +9,19 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("Song")]
     public Dropdown songDropdown;
 
-    [Header("Search Bar")]
-    public Slider searchBar;
-    public bool isSearching;
-
     [Header("Visualization")]
     public Dropdown visualizationDropdown;
 
     [Header("Settings Panels")]
     public List<SettingsPanelBase> settingsPanelList;
+
+    [Header("Search Bar")]
+    public Slider searchBar;
+    public bool isSearching;
+
+    [Header("Play Button")]
+    public Image playButtonImage;
+    public List<Sprite> playButtonSprites;
 
     [Header("Time Text")]
     public Text timeText;
@@ -111,6 +115,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         {
             AudioManager.Instance.PlayMusic();
         }
+
+        this.SetPlayButtonSprite();
     }
 
     public void OnVolumeClick()
@@ -223,6 +229,18 @@ public class CanvasManager : MonoSingleton<CanvasManager>
                 this.volumeImage.sprite = this.volumeSpriteList[i + 1]; // 0 is volume mute
                 i = this.volumeImageThresholds.Length;
             }
+        }
+    }
+
+    public void SetPlayButtonSprite()
+    {
+        if (AudioManager.Instance.audioSource.isPlaying)
+        {
+            this.playButtonImage.sprite = this.playButtonSprites[1];
+        }
+        else
+        {
+            this.playButtonImage.sprite = this.playButtonSprites[0];
         }
     }
 

@@ -639,7 +639,6 @@ GameObject:
   - component: {fileID: 34050534}
   - component: {fileID: 34050533}
   - component: {fileID: 34050532}
-  - component: {fileID: 34050535}
   m_Layer: 0
   m_Name: PlayButton
   m_TagString: Untagged
@@ -715,17 +714,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 34050535}
-        m_MethodName: SwapSprites
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &34050533
@@ -762,22 +750,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 34050530}
   m_CullTransparentMesh: 0
---- !u!114 &34050535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 34050530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2201d9116d166fa4e80453b2e8d9c5fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  image: {fileID: 34050533}
-  spriteIndex: 0
-  spriteList:
-  - {fileID: 21300000, guid: 6d59a9808d6efe644b307b55f718c0c1, type: 3}
-  - {fileID: 21300000, guid: 335a9edbfd49f474daba14c34931754e, type: 3}
 --- !u!1001 &35719918
 Prefab:
   m_ObjectHideFlags: 0
@@ -3607,14 +3579,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songDropdown: {fileID: 1941657890}
-  searchBar: {fileID: 1269234550}
-  isSearching: 0
   visualizationDropdown: {fileID: 1745942367}
   settingsPanelList:
   - {fileID: 1096699314}
   - {fileID: 414405918}
   - {fileID: 831963157}
   - {fileID: 502388866}
+  searchBar: {fileID: 1269234550}
+  isSearching: 0
+  playButtonImage: {fileID: 34050533}
+  playButtonSprites:
+  - {fileID: 21300000, guid: 335a9edbfd49f474daba14c34931754e, type: 3}
+  - {fileID: 21300000, guid: 6d59a9808d6efe644b307b55f718c0c1, type: 3}
   timeText: {fileID: 610558966}
   volumeImageThresholds:
   - 0.3
