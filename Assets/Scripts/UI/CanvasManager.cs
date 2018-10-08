@@ -9,13 +9,16 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("Song")]
     public Dropdown songDropdown;
 
-    [Header("Visualization")]
-    public Dropdown visualizationDropdown;
-
     [Header("SidePanels")]
     public GameObject visualizationPanel;
     public List<SettingsPanelBase> settingsPanelList;
 
+    [Header("SideButtons")]
+    public float sideButtonFadeTime;
+    public float sideButtonMoveTime;
+    public List<Vector2> sideButtonPositions;
+    public List<RectTransform> sideButtonTransforms;
+    public List<Image> sideButtonImages;
 
     [Header("Search Bar")]
     public Slider searchBar;
@@ -80,12 +83,12 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnSettingsClick()
     {
-        this.ToggleSettingsPanel();
+        this.StartCoroutine(this.ToggleSettingsPanel());
     }
 
     public void OnVisualizationClick()
     {
-        this.visualizationPanel.SetActive(!this.visualizationPanel.activeSelf);
+        this.StartCoroutine(this.ToggleVisualizationPanel());
     }
 
     public void OnSongDropdownUpdate(int _index)
@@ -104,7 +107,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.isSearching = false;
     }
 
-    public void OnVisualizationDropdownUpdate(int _index)
+    public void OnVisualizationSelectClick(int _index)
     {
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.ChangeVisualization(_index));
     }
@@ -155,9 +158,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public IEnumerator SetupUI()
     {
-        // Visualization dropdown
-        this.visualizationDropdown.value = DemoManager.Instance.currentVisualization;
-
         // Song dropdown
         List<Dropdown.OptionData> dataList = new List<Dropdown.OptionData>();
 
@@ -185,6 +185,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         yield return null;
     }
 
+
     public IEnumerator SearchRoutine()
     {
         if (this.isSearching)
@@ -210,21 +211,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         this.searchBar.maxValue = AudioManager.Instance.songs[this.songDropdown.value].length;
         this.searchBar.value = 0.0f;
-    }
-
-    public void ToggleSettingsPanel()
-    {
-        this.settingsPanelList[this.visualizationDropdown.value].TogglePanel();
-    }
-
-    public IEnumerator ChangeVisualization(int _index)
-    {
-        this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(
-            this.settingsPanelList[DemoManager.Instance.currentVisualization].Stop());
-
-        this.settingsPanelList[_index].StartCoroutine(this.settingsPanelList[_index].Initialize());
-
-        yield return null;
     }
 
     public void SetVolumeSprite()
@@ -268,9 +254,94 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.timeText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
+
     public void ToggleEscapeContainer()
     {
         this.escapeContainer.SetActive(!this.escapeContainer.activeSelf);
+    }
+
+
+    public IEnumerator ToggleSettingsPanel()
+    {
+        if (this.settingsPanelList[DemoManager.Instance.currentVisualization].settingsPanel.activeSelf)
+        {
+            this.settingsPanelList[DemoManager.Instance.currentVisualization].TogglePanel();
+            yield return this.StartCoroutine(this.ShiftSideButtons(0, false));
+        }
+        else
+        {
+            yield return this.StartCoroutine(this.ShiftSideButtons(0, true));
+            this.settingsPanelList[DemoManager.Instance.currentVisualization].TogglePanel();
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator ToggleVisualizationPanel()
+    {
+        if (this.visualizationPanel.activeSelf)
+        {
+            this.visualizationPanel.SetActive(false);
+            yield return this.StartCoroutine(this.ShiftSideButtons(1, false));
+        }
+        else
+        {
+            yield return this.StartCoroutine(this.ShiftSideButtons(1, true));
+            this.visualizationPanel.SetActive(true);
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator ShiftSideButtons(int _selectedButton, bool _isOpeningPanel)
+    {
+        if (_isOpeningPanel)
+        {
+            // Fade out not selected buttons
+            for (int i = 0; i < this.sideButtonImages.Count; i++)
+            {
+                if (i == _selectedButton)
+                    continue;
+
+                if (i == this.sideButtonImages.Count - 1)
+                    yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 0.0f));
+                else
+                    UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 0.0f));
+            }
+
+            // move selected button to selected position
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.MoveTransformOverTime(this.sideButtonTransforms[_selectedButton], this.sideButtonPositions[0], this.sideButtonMoveTime));
+        }
+        else
+        {
+            // Move selected button back to original position
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.MoveTransformOverTime(this.sideButtonTransforms[_selectedButton], this.sideButtonPositions[_selectedButton], this.sideButtonMoveTime));
+
+            // Fade in not selected buttons
+            for (int i = 0; i < this.sideButtonImages.Count; i++)
+            {
+                if (i == _selectedButton)
+                    continue;
+
+                if (i == this.sideButtonImages.Count - 1)
+                    yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 1.0f));
+                else
+                    UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.sideButtonImages[i], this.sideButtonFadeTime, 1.0f));
+            }
+        }
+
+        yield return null;
+    }
+
+
+    public IEnumerator ChangeVisualization(int _index)
+    {
+        this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(
+            this.settingsPanelList[DemoManager.Instance.currentVisualization].Stop());
+
+        this.settingsPanelList[_index].StartCoroutine(this.settingsPanelList[_index].Initialize());
+
+        yield return null;
     }
 
     #endregion
