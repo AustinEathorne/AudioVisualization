@@ -81,6 +81,9 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public void Search(float _time)
     {
+        if (_time >= this.audioSource.clip.length)
+            return;
+
         this.audioSource.time = _time;
     }
 

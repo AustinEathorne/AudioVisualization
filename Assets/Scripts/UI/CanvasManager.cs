@@ -19,6 +19,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("Settings Panels")]
     public List<SettingsPanelBase> settingsPanelList;
 
+    [Header("Time Text")]
+    public Text timeText;
+
     [Header("Volume")]
     public float[] volumeImageThresholds = new float[3];
     public List<Sprite> volumeSpriteList;
@@ -47,6 +50,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
             {
                 this.searchBar.value = AudioManager.Instance.audioSource.time;
             }
+
+            this.SetTimeText();
 
             yield return null;
         }
@@ -219,6 +224,15 @@ public class CanvasManager : MonoSingleton<CanvasManager>
                 i = this.volumeImageThresholds.Length;
             }
         }
+    }
+
+    public void SetTimeText()
+    {
+        float time = AudioManager.Instance.audioSource.time;
+        int minutes = Mathf.FloorToInt(time / 60F);
+        int seconds = Mathf.FloorToInt(time - minutes * 60);
+
+        this.timeText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
     #endregion
