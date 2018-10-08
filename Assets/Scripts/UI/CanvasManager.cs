@@ -12,8 +12,10 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("Visualization")]
     public Dropdown visualizationDropdown;
 
-    [Header("Settings Panels")]
+    [Header("SidePanels")]
+    public GameObject visualizationPanel;
     public List<SettingsPanelBase> settingsPanelList;
+
 
     [Header("Search Bar")]
     public Slider searchBar;
@@ -79,6 +81,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public void OnSettingsClick()
     {
         this.ToggleSettingsPanel();
+    }
+
+    public void OnVisualizationClick()
+    {
+        this.visualizationPanel.SetActive(!this.visualizationPanel.activeSelf);
     }
 
     public void OnSongDropdownUpdate(int _index)
