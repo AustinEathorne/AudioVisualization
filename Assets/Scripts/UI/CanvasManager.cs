@@ -11,6 +11,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     [Header("SidePanels")]
     public GameObject visualizationPanel;
+    public GameObject libraryPanel;
     public List<SettingsPanelBase> settingsPanelList;
 
     [Header("SideButtons")]
@@ -91,6 +92,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.StartCoroutine(this.ToggleVisualizationPanel());
     }
 
+    public void OnLibraryClick()
+    {
+        this.StartCoroutine(this.ToggleLibraryPanel());
+    }
+
     public void OnSongDropdownUpdate(int _index)
     {
         AudioManager.Instance.ChangeSong(_index);
@@ -110,12 +116,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public void OnVisualizationSelectClick(int _index)
     {
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.ChangeVisualization(_index));
-    }
-
-    public void OnChannelSelect(int _channel)
-    {
-        AudioPeer.Instance.channel = (Channel)_channel;
-        AudioManager.Instance.SetStereoPan((Channel) _channel);
     }
 
     public void OnPlayClick()
@@ -150,6 +150,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public void OnQuitClick()
     {
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.Quit());
+    }
+
+    public void OnSongSelectClick()
+    {
+
     }
 
     #endregion
@@ -288,6 +293,22 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         {
             yield return this.StartCoroutine(this.ShiftSideButtons(1, true));
             this.visualizationPanel.SetActive(true);
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator ToggleLibraryPanel()
+    {
+        if (this.libraryPanel.activeSelf)
+        {
+            this.libraryPanel.SetActive(false);
+            yield return this.StartCoroutine(this.ShiftSideButtons(2, false));
+        }
+        else
+        {
+            yield return this.StartCoroutine(this.ShiftSideButtons(2, true));
+            this.libraryPanel.SetActive(true);
         }
 
         yield return null;
