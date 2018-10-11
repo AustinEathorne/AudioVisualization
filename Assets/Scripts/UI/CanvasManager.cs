@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CanvasManager : MonoSingleton<CanvasManager>
@@ -72,7 +73,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public InputField filePathInputField;
     public Button exampleAudioButton;
     public Text errorText;
-
+    public string lastFilePath = "";
 
 
     #region Main
@@ -191,6 +192,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnFilePathUpdate(string _filePath)
     {
+        if (_filePath == this.lastFilePath)
+            return;
+
+        this.lastFilePath = _filePath;
+
         this.StartCoroutine(this.ClearSongSelection());
 
         // Check for file path
@@ -223,6 +229,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnExampleAudioClick()
     {
+        this.lastFilePath = "";
         this.errorText.gameObject.SetActive(false);
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.UseDemoFiles());
     }
@@ -238,6 +245,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnStartFilePathUpdate(string _filePath)
     {
+        if (_filePath == this.lastFilePath)
+            return;
+
+        this.lastFilePath = _filePath;
+
         // Check for file path
         if (!DemoManager.Instance.IsValidPath(_filePath))
         {
@@ -267,6 +279,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnStartExampleAudioClick()
     {
+        this.lastFilePath = "";
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo());
     }
 

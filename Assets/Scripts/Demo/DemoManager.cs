@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DemoManager : MonoSingleton<DemoManager>
 {
@@ -231,6 +232,11 @@ public class DemoManager : MonoSingleton<DemoManager>
         // Stop everything
         //yield return this.StartCoroutine(this.Stop());
 
+        if (EventSystem.current)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
         CanvasManager.Instance.filePathInputField.interactable = false;
         CanvasManager.Instance.exampleAudioButton.interactable = false;
 
@@ -252,10 +258,16 @@ public class DemoManager : MonoSingleton<DemoManager>
             WWW request = new WWW(path);
             yield return request;
 
-            AudioManager.Instance.songs.Add(request.GetAudioClip());
+            AudioClip clip = request.GetAudioClip();
+            string name = Path.GetFileNameWithoutExtension(Path.GetFileName(path));
+            clip.name = name;
+
+            AudioManager.Instance.songs.Add(clip);
 
             Debug.Log("Path: " + path);
-            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(count, path));
+            Debug.Log("Name: " + name);
+
+            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(count, name));
             count++;
         }
 
