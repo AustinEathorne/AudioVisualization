@@ -9,16 +9,15 @@ public class AudioManager : MonoSingleton<AudioManager>
     public AudioSource audioSource;
 
     public List<AudioClip> songs;
+    public List<AudioClip> exampleSongs;
 
+    public int currentSong = 0;
 
     #region Main
 
     public override IEnumerator Initialize()
     {
         this.isInitialized = false;
-
-        // Set clip
-        this.audioSource.clip = this.songs[0];
 
         // Yield audio peer initialization
         yield return AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Initialize());
@@ -32,6 +31,9 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         this.isRunning = true;
 
+        // Set first clip
+        this.audioSource.clip = this.songs[0];
+
         // Start playing music
         this.audioSource.Play();
 
@@ -40,7 +42,13 @@ public class AudioManager : MonoSingleton<AudioManager>
 
         while (this.isRunning)
         {
-            
+            if(this.CheckForSongEnd())
+            {
+                this.audioSource.Stop();
+                this.audioSource.time = 0.0f;
+                CanvasManager.Instance.SetPlayButtonSprite();
+            }
+
             yield return null;
         }
 
@@ -49,7 +57,10 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public override IEnumerator Stop()
     {
+        this.audioSource.Stop();
+        AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Stop());
         this.isRunning = false;
+
         yield return null;
     }
 
@@ -66,6 +77,8 @@ public class AudioManager : MonoSingleton<AudioManager>
         this.audioSource.clip = this.songs[_index];
         this.audioSource.time = 0.0f;
 
+        this.currentSong = _index;
+
         this.audioSource.Play();
     }
 
@@ -81,6 +94,9 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public void Search(float _time)
     {
+        if (_time >= this.audioSource.clip.length)
+            return;
+
         this.audioSource.time = _time;
     }
 
@@ -108,6 +124,16 @@ public class AudioManager : MonoSingleton<AudioManager>
     public void SetVolume(float _value)
     {
         this.audioSource.volume = _value;
+    }
+
+    public bool CheckForSongEnd()
+    {
+        if (this.audioSource.time >= this.audioSource.clip.length)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

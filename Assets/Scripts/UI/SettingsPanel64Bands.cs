@@ -16,7 +16,8 @@ public class SettingsPanel64Bands : SettingsPanelBase
     public Text maxScaleText;
     public Slider scaleMultiplierSlider;
     public Text scaleMultiplierText;
-    public Dropdown channelDropdown;
+    public Slider channelSlider;
+    public Text channelText;
 
 
     #region Main
@@ -38,18 +39,7 @@ public class SettingsPanel64Bands : SettingsPanelBase
         this.scaleMultiplierSlider.value = this.visualization.scaleMultiplier;
         this.scaleMultiplierText.text = this.visualization.scaleMultiplier.ToString();
 
-        if (AudioManager.Instance.audioSource.panStereo == 0)
-        {
-            this.channelDropdown.value = 0;
-        }
-        else if (AudioManager.Instance.audioSource.panStereo == -1)
-        {
-            this.channelDropdown.value = 1;
-        }
-        else
-        {
-            this.channelDropdown.value = 2;
-        }
+        this.channelSlider.value = AudioManager.Instance.audioSource.panStereo;
 
         yield return null;
     }
@@ -90,6 +80,11 @@ public class SettingsPanel64Bands : SettingsPanelBase
     public void OnUseBandBufferToggle(bool _value)
     {
         this.visualization.isUsingBandBuffers = _value;
+    }
+
+    public void OnChannelUpdate(float _value)
+    {
+        this.channelText.text = this.channelSlider.value.ToString();
     }
 
     #endregion
