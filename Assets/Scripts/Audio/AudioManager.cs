@@ -9,6 +9,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     public AudioSource audioSource;
 
     public List<AudioClip> songs;
+    public List<AudioClip> exampleSongs;
 
     public int currentSong = 0;
 
@@ -17,9 +18,6 @@ public class AudioManager : MonoSingleton<AudioManager>
     public override IEnumerator Initialize()
     {
         this.isInitialized = false;
-
-        // Set clip
-        this.audioSource.clip = this.songs[0];
 
         // Yield audio peer initialization
         yield return AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Initialize());
@@ -33,8 +31,11 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         this.isRunning = true;
 
+        // Set first clip
+        this.audioSource.clip = this.songs[0];
+
         // Start playing music
-        this.audioSource.Play();
+        //this.audioSource.Play();
 
         // Start audio peer run routine
         AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Run());

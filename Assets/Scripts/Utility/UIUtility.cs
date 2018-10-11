@@ -620,9 +620,121 @@ public class UIUtility : MonoSingleton<UIUtility>
 
     #endregion
 
+    #region Canvas Group
+
+    /// <summary>
+    /// Fade singular canvas group component's alpha to target alpha
+    /// </summary>
+    /// <param name="_group"></param>
+    /// <param name="_fadeTime"></param>
+    /// <param name="_targetAlpha"></param>
+    /// <returns></returns>
+    public IEnumerator FadeOverTime(CanvasGroup _group, float _fadeTime, float _targetAlpha)
+    {
+        float elapsedTime = 0.0f;
+        float startAlpha = _group.alpha;
+        float currentAlpha = startAlpha;
+
+        while (elapsedTime < _fadeTime)
+        {
+            currentAlpha = Mathf.Lerp(startAlpha, _targetAlpha, (elapsedTime / _fadeTime));
+
+            if (_group)
+                _group.alpha = currentAlpha;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (_group)
+            _group.alpha = _targetAlpha;
+
+        yield return null;
+    }
+
+    /// <summary>
+    /// Fade singular canvas group component's alpha to target alpha
+    /// </summary>
+    /// <param name="_group"></param>
+    /// <param name="_fadeSpeed"></param>
+    /// <param name="_targetAlpha"></param>
+    /// <returns></returns>
+    public IEnumerator FadeBySpeed(CanvasGroup _group, float _fadeSpeed, float _targetAlpha)
+    {
+        float alpha = _group.alpha;
+        float distance = alpha > _targetAlpha ? alpha - _targetAlpha : _targetAlpha - alpha;
+        float fadeTime = distance / _fadeSpeed;
+
+        yield return this.StartCoroutine(this.FadeOverTime(_group, fadeTime, _targetAlpha));
+    }
+
+    /// <summary>
+    /// Fade list of image components' alpha to target alpha
+    /// </summary>
+    /// <param name="_groups"></param>
+    /// <param name="_fadeTime"></param>
+    /// <param name="_targetAlpha"></param>
+    /// <param name="_isSimultaneous"></param>
+    /// <returns></returns>
+	public IEnumerator FadeListOverTime(List<CanvasGroup> _groups, float _fadeTime, float _targetAlpha, bool _isSimultaneous)
+    {
+        for (int i = 0; i < _groups.Count; i++)
+        {
+            if (_isSimultaneous)
+            {
+                if (i < _groups.Count - 1)
+                {
+                    this.StartCoroutine(this.FadeOverTime(_groups[i], _fadeTime, _targetAlpha));
+                }
+                else
+                {
+                    yield return this.StartCoroutine(this.FadeOverTime(_groups[i], _fadeTime, _targetAlpha));
+                }
+            }
+            else
+            {
+                yield return this.StartCoroutine(this.FadeOverTime(_groups[i], _fadeTime, _targetAlpha));
+            }
+        }
+        yield return null;
+    }
+
+    /// <summary>
+    /// Fade list of text components' alpha to target alpha
+    /// </summary>
+    /// <param name="_groups"></param>
+    /// <param name="_isFadingIn"></param>
+    /// <param name="_targetAlpha"></param>
+    /// <param name="_fadeSpeed"></param>
+    /// <param name="_isSimultaneous"></param>
+    /// <returns></returns>
+	public IEnumerator FadeListBySpeed(List<CanvasGroup> _groups, float _fadeSpeed, float _targetAlpha, bool _isSimultaneous)
+    {
+        for (int i = 0; i < _groups.Count; i++)
+        {
+            if (_isSimultaneous)
+            {
+                if (i < _groups.Count - 1)
+                {
+                    this.StartCoroutine(this.FadeBySpeed(_groups[i], _fadeSpeed, _targetAlpha));
+                }
+                else
+                {
+                    yield return this.StartCoroutine(this.FadeBySpeed(_groups[i], _fadeSpeed, _targetAlpha));
+                }
+            }
+            else
+            {
+                yield return this.StartCoroutine(this.FadeBySpeed(_groups[i], _fadeSpeed, _targetAlpha));
+            }
+        }
+        yield return null;
+    }
+
+    #endregion
+
     // TODO: test
     #region Containers (Buttons, etc)
-        
+
     /// <summary>
     /// Fade all text & image components found within a container
     /// </summary>

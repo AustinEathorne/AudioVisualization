@@ -18,10 +18,35 @@ public class DemoManager : MonoSingleton<DemoManager>
         yield return this.StartCoroutine(this.Initialize());
 
         // Start Run routine
+        //this.StartCoroutine(this.Run());
+
+        yield return null;
+    }
+
+    // Using example audio
+    public IEnumerator StartDemo()
+    {
+        // Set audio manager song list
+        AudioManager.Instance.songs = AudioManager.Instance.exampleSongs;
+
+        // Run
         this.StartCoroutine(this.Run());
 
         yield return null;
     }
+
+    // Using file path
+    public IEnumerator StartDemo(string _filePath)
+    {
+        // Load in files
+        yield return this.StartCoroutine(this.LoadFiles(_filePath));
+
+        // Run
+        this.StartCoroutine(this.Run());
+
+        yield return null;
+    }
+
 
     public override IEnumerator Initialize()
     {
@@ -84,6 +109,7 @@ public class DemoManager : MonoSingleton<DemoManager>
         yield return null;
     }
 
+
     public IEnumerator Quit()
     {
         yield return this.StartCoroutine(this.Stop());
@@ -142,14 +168,18 @@ public class DemoManager : MonoSingleton<DemoManager>
         //yield return this.StartCoroutine(this.Stop());
 
         // Get all mp3 file paths
-        string[] filePaths = Directory.GetFiles(_filepath, "*.WAV");
+        List<string> filePathList = new List<string>();
+        if (this.IsValidPath(_filepath))
+        {
+            filePathList.AddRange(Directory.GetFiles(_filepath, "*.WAV"));
+        }
 
         AudioManager.Instance.songs.Clear();
         yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ClearSongSelection());
 
         int count = 0;
 
-        foreach (string path in filePaths)
+        foreach (string path in filePathList)
         {
             // Get & create audio clip
             WWW request = new WWW(path);
@@ -166,6 +196,26 @@ public class DemoManager : MonoSingleton<DemoManager>
         //this.StartCoroutine(this.Run());
 
         yield return null;
+    }
+
+    // Check if the file path is valid
+    public bool IsValidPath(string _path)
+    {
+        if (Directory.Exists(_path))
+            return true;
+
+        return false;
+    }
+
+    // Check if the the file path contains audio files
+    public bool HasAudioFiles(string _path)
+    {
+        if (Directory.GetFiles(_path, "*.WAV").Length != 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

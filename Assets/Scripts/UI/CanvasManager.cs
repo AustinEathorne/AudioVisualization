@@ -6,6 +6,13 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoSingleton<CanvasManager>
 {
+    [Header("StartScreen")]
+    public CanvasGroup startScreenGroup;
+    public GameObject startSceenContainer;
+    public Text startScreenErrorText;
+
+    public float startScreenFadeTime;
+
     [Header("SidePanels")]
     public GameObject visualizationPanel;
     public GameObject libraryPanel;
@@ -49,14 +56,16 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         this.isInitialized = false;
 
-        yield return this.StartCoroutine(this.SetupUI());
-
         this.isInitialized = true;
+
+        yield return null;
     }
 
     public override IEnumerator Run()
     {
         this.isRunning = true;
+
+        yield return this.StartCoroutine(this.SetupUI());
 
         while (this.isRunning)
         {
@@ -165,6 +174,41 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.ResetSearchBar();
     }
 
+
+    public void OnStartFilePathUpdate(string _filePath)
+    {
+        // Check for file path
+        if (!DemoManager.Instance.IsValidPath(_filePath))
+        {
+            // Set error text
+            this.startScreenErrorText.text = "Please enter a valid file path";
+
+            // Bring up error text
+            this.startScreenErrorText.gameObject.SetActive(true);
+
+            return;
+        }
+
+        // Check for audio files at path
+        if (!DemoManager.Instance.HasAudioFiles(_filePath))
+        {
+            // Set error text
+            this.startScreenErrorText.text = "Please enter a path to a folder that contains .wav files";
+
+            // Bring up error text
+            this.startScreenErrorText.gameObject.SetActive(true);
+
+            return;
+        }
+
+        this.StartCoroutine(this.CloseStartScreen(false, _filePath));
+    }
+
+    public void OnUseExampleAudioClick()
+    {
+        this.StartCoroutine(this.CloseStartScreen(true, ""));
+    }
+
     #endregion
 
     #region UI
@@ -185,7 +229,23 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         yield return null;
     }
 
+    public IEnumerator CloseStartScreen(bool _isUsingExampleAudio, string _filePath)
+    {
+        // Close the start screen
+        this.startScreenGroup.interactable = false;
+        yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.startScreenGroup, this.startScreenFadeTime, 0.0f));
+        this.startScreenErrorText.gameObject.SetActive(false);
+        this.startScreenGroup.blocksRaycasts = false;
 
+        // Tell demo manager to start the demo
+        if(_isUsingExampleAudio)
+            DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo());
+        else
+            DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo(_filePath));
+
+        yield return null;
+    }
+    
     public IEnumerator SearchRoutine()
     {
         if (this.isSearching)
