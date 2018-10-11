@@ -50,11 +50,27 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("Escape Container")]
     public GameObject escapeContainer;
 
+    [Header("ToggledContainers")]
+    public CanvasGroup sideButtonGroup;
+    public CanvasGroup mediaControlsGroup;
+    public CanvasGroup settingsGroup;
+    public CanvasGroup visualizationGroup;
+    public CanvasGroup libraryGroup;
+
+    public IEnumerator toggleUiRoutine;
+    public float demoUiFadeOutTime;
+    public float demoUiFadeInTime;
+    public bool isDemoUiActive;
+
+
+
     #region Main
 
     public override IEnumerator Initialize()
     {
         this.isInitialized = false;
+
+        this.searchBar.value = 0.0f;
 
         this.isInitialized = true;
 
@@ -225,6 +241,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
         // Settings panel
         yield return this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(this.settingsPanelList[DemoManager.Instance.currentVisualization].Initialize());
+
+        this.isDemoUiActive = true;
 
         yield return null;
     }
@@ -455,6 +473,53 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         button.onClick.AddListener(() => this.OnSongSelectClick(_index));
 
         Debug.Log("Added button for song: " + _index.ToString());
+
+        yield return null;
+    }
+
+    public void ToggleDemoUI(bool _isActive)
+    {
+        this.isDemoUiActive = _isActive;
+
+        if (this.toggleUiRoutine != null)
+        {
+            this.StopCoroutine(this.toggleUiRoutine);
+        }
+
+        this.toggleUiRoutine = this.ToggleDemoUI();
+        this.StartCoroutine(this.toggleUiRoutine);
+    }
+
+    public IEnumerator ToggleDemoUI()
+    {
+        if (this.isDemoUiActive)
+        {
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.sideButtonGroup, this.demoUiFadeInTime, 1.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.mediaControlsGroup, this.demoUiFadeInTime, 1.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.settingsGroup, this.demoUiFadeInTime, 1.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.visualizationGroup, this.demoUiFadeInTime, 1.0f));
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.libraryGroup, this.demoUiFadeInTime, 1.0f));
+        }
+        else
+        {
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.sideButtonGroup, this.demoUiFadeOutTime, 0.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.mediaControlsGroup, this.demoUiFadeOutTime, 0.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.settingsGroup, this.demoUiFadeOutTime, 0.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.visualizationGroup, this.demoUiFadeOutTime, 0.0f));
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.libraryGroup, this.demoUiFadeOutTime, 0.0f));
+        }
+
+        this.toggleUiRoutine = null;
 
         yield return null;
     }

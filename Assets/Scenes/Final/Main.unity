@@ -2296,7 +2296,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.5
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -4526,6 +4526,14 @@ MonoBehaviour:
   songSelectButtonList: []
   songSelectTextList: []
   escapeContainer: {fileID: 1405786299}
+  sideButtonGroup: {fileID: 264790638}
+  mediaControlsGroup: {fileID: 565627399}
+  settingsGroup: {fileID: 1289862257}
+  visualizationGroup: {fileID: 1825492158}
+  libraryGroup: {fileID: 1281058243}
+  demoUiFadeOutTime: 1
+  demoUiFadeInTime: 0.5
+  isDemoUiActive: 1
 --- !u!1 &441831991
 GameObject:
   m_ObjectHideFlags: 0
@@ -6053,7 +6061,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 00:00
+  m_Text: 0:00
 --- !u!222 &610558967
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9304,7 +9312,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Visualization
+  m_Text: Library
 --- !u!222 &988241139
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12120,6 +12128,9 @@ MonoBehaviour:
   - {fileID: 502388867}
   currentVisualization: 3
   isChangingVisualization: 0
+  lastMousePosition: {x: 0, y: 0}
+  timeToIdle: 3
+  idleTimeCount: 0
 --- !u!1 &1231531810
 GameObject:
   m_ObjectHideFlags: 0
@@ -12819,6 +12830,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1281058242}
+  - component: {fileID: 1281058243}
   m_Layer: 0
   m_Name: LibraryPanel
   m_TagString: Untagged
@@ -12849,6 +12861,17 @@ RectTransform:
   m_AnchoredPosition: {x: -240, y: -470}
   m_SizeDelta: {x: 440, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1281058243
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1281058241}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1289862255
 GameObject:
   m_ObjectHideFlags: 0
@@ -12857,6 +12880,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1289862256}
+  - component: {fileID: 1289862257}
   m_Layer: 0
   m_Name: SettingsPanelsContainer
   m_TagString: Untagged
@@ -12886,6 +12910,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1289862257
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1289862255}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1310321824
 Prefab:
   m_ObjectHideFlags: 0
@@ -15568,6 +15603,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 515134695}
+  - component: {fileID: 1825492158}
   m_Layer: 0
   m_Name: VisualizationPanel
   m_TagString: Untagged
@@ -15575,6 +15611,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!225 &1825492158
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1825492157}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1848890643
 GameObject:
   m_ObjectHideFlags: 0

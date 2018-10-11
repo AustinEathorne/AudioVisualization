@@ -10,6 +10,10 @@ public class DemoManager : MonoSingleton<DemoManager>
     public int currentVisualization;
     public bool isChangingVisualization;
 
+    public Vector2 lastMousePosition = Vector3.zero;
+    public float timeToIdle;
+    public float idleTimeCount = 0.0f;
+
     #region Main
 
     public IEnumerator Start()
@@ -26,8 +30,14 @@ public class DemoManager : MonoSingleton<DemoManager>
     // Using example audio
     public IEnumerator StartDemo()
     {
-        // Set audio manager song list
-        AudioManager.Instance.songs = AudioManager.Instance.exampleSongs;
+        // Set audio manager song list and add song select buttons
+        for (int i = 0; i < AudioManager.Instance.exampleSongs.Count; i++)
+        {
+            AudioManager.Instance.songs.Add(AudioManager.Instance.exampleSongs[i]);
+
+            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(
+                i, AudioManager.Instance.exampleSongs[i].name));
+        }
 
         // Run
         this.StartCoroutine(this.Run());
@@ -87,6 +97,27 @@ public class DemoManager : MonoSingleton<DemoManager>
             if (this.CheckForEscapeInput())
             {
                 CanvasManager.Instance.ToggleEscapeContainer();
+            }
+
+            // Mouse input is idle
+            if (this.CheckForIdleMouse())
+            {
+                // Check if the demo UI is currently active
+                if (CanvasManager.Instance.isDemoUiActive)
+                {
+                    CanvasManager.Instance.ToggleDemoUI(false);
+                    Cursor.visible = false;
+                }
+            }
+            // Mouse input is not idle
+            else
+            {
+                // Check if the demo UI is currently inactive
+                if (!CanvasManager.Instance.isDemoUiActive)
+                {
+                    CanvasManager.Instance.ToggleDemoUI(true);
+                    Cursor.visible = true;
+                }
             }
 
             yield return null;
@@ -151,6 +182,28 @@ public class DemoManager : MonoSingleton<DemoManager>
     public bool CheckForEscapeInput()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CheckForIdleMouse()
+    {
+        Vector2 mousePos = Input.mousePosition;
+
+        if (mousePos == this.lastMousePosition)
+        {
+            this.idleTimeCount += Time.deltaTime;
+        }
+        else
+        {
+            this.lastMousePosition = mousePos;
+            this.idleTimeCount = 0.0f;
+        }
+
+        if (this.idleTimeCount >= this.timeToIdle)
         {
             return true;
         }
