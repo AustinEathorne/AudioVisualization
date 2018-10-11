@@ -55,12 +55,16 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public CanvasGroup mediaControlsGroup;
     public CanvasGroup visualizationGroup;
     public CanvasGroup libraryGroup;
+    public CanvasGroup titleGroup;
 
-    public IEnumerator toggleUiRoutine;
     public float demoUiFadeOutTime;
     public float demoUiFadeInTime;
     public bool isDemoUiActive;
 
+    [Header("DemoTitles")]
+    public Text songTitleText;
+    public Text visTitleText;
+    public List<string> visNameList;
 
 
     #region Main
@@ -187,6 +191,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         Debug.Log("Select Song: " + _index.ToString());
         AudioManager.Instance.ChangeSong(_index);
         this.ResetSearchBar();
+        this.UpdateDemoTitleText();
     }
 
 
@@ -216,12 +221,12 @@ public class CanvasManager : MonoSingleton<CanvasManager>
             return;
         }
 
-        this.StartCoroutine(this.CloseStartScreen(false, _filePath));
+        DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo(_filePath));
     }
 
     public void OnUseExampleAudioClick()
     {
-        this.StartCoroutine(this.CloseStartScreen(true, ""));
+        DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo());
     }
 
     #endregion
@@ -230,6 +235,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public IEnumerator SetupUI()
     {
+        // Title text
+        this.UpdateDemoTitleText();
+
         // Search bar
         this.searchBar.maxValue = AudioManager.Instance.songs[0].length;
         this.searchBar.value = 0.0f;
@@ -246,23 +254,18 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         yield return null;
     }
 
+
     public IEnumerator CloseStartScreen(bool _isUsingExampleAudio, string _filePath)
     {
-        // Close the start screen
         this.startScreenGroup.interactable = false;
         yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.startScreenGroup, this.startScreenFadeTime, 0.0f));
         this.startScreenErrorText.gameObject.SetActive(false);
         this.startScreenGroup.blocksRaycasts = false;
 
-        // Tell demo manager to start the demo
-        if(_isUsingExampleAudio)
-            DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo());
-        else
-            DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo(_filePath));
-
         yield return null;
     }
     
+
     public IEnumerator SearchRoutine()
     {
         if (this.isSearching)
@@ -436,6 +439,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
         this.settingsPanelList[_index].StartCoroutine(this.settingsPanelList[_index].Initialize());
 
+        this.UpdateDemoTitleText();
+
         yield return null;
     }
 
@@ -481,8 +486,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         if (_isActive)
         {
-            Debug.Log("Start Fading in UI");
-
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.titleGroup, this.demoUiFadeInTime, 1.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.sideButtonGroup, this.demoUiFadeInTime, 1.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
@@ -493,12 +498,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
                 this.visualizationGroup, this.demoUiFadeInTime, 1.0f));
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.libraryGroup, this.demoUiFadeInTime, 1.0f));
-
-            Debug.Log("Finish Fading in UI");
         }
         else
         {
-            Debug.Log("Start Fading out UI");
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.titleGroup, this.demoUiFadeOutTime, 0.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.sideButtonGroup, this.demoUiFadeOutTime, 0.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
@@ -509,13 +513,18 @@ public class CanvasManager : MonoSingleton<CanvasManager>
                 this.visualizationGroup, this.demoUiFadeOutTime, 0.0f));
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.libraryGroup, this.demoUiFadeOutTime, 0.0f));
-
-            Debug.Log("Finish fading out UI");
         }
 
         this.isDemoUiActive = _isActive;
 
         yield return null;
+    }
+
+
+    public void UpdateDemoTitleText()
+    {
+        this.songTitleText.text = AudioManager.Instance.audioSource.clip.name;
+        this.visTitleText.text = this.visNameList[DemoManager.Instance.currentVisualization];
     }
 
     #endregion

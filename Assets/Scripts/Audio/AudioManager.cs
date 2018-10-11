@@ -35,7 +35,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         this.audioSource.clip = this.songs[0];
 
         // Start playing music
-        //this.audioSource.Play();
+        this.audioSource.Play();
 
         // Start audio peer run routine
         AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.Run());

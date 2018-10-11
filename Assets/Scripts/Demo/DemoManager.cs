@@ -42,6 +42,9 @@ public class DemoManager : MonoSingleton<DemoManager>
         // Run
         this.StartCoroutine(this.Run());
 
+        // Close start screen
+        CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.CloseStartScreen(true, ""));
+
         yield return null;
     }
 
@@ -53,6 +56,9 @@ public class DemoManager : MonoSingleton<DemoManager>
 
         // Run
         this.StartCoroutine(this.Run());
+
+        // Close start screen
+        CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.CloseStartScreen(false, _filePath));
 
         yield return null;
     }
