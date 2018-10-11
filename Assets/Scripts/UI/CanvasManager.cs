@@ -71,6 +71,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("FilePath")]
     public InputField filePathInputField;
     public Button exampleAudioButton;
+    public Text errorText;
+
+
 
     #region Main
 
@@ -188,11 +191,39 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnFilePathUpdate(string _filePath)
     {
+        this.StartCoroutine(this.ClearSongSelection());
+
+        // Check for file path
+        if (!DemoManager.Instance.IsValidPath(_filePath))
+        {
+            // Set error text
+            this.errorText.text = "Please enter a valid file path";
+
+            // Bring up error text
+            this.errorText.gameObject.SetActive(true);
+
+            return;
+        }
+
+        // Check for audio files at path
+        if (!DemoManager.Instance.HasAudioFiles(_filePath))
+        {
+            // Set error text
+            this.errorText.text = "Please enter a path to a folder that contains .wav files";
+
+            // Bring up error text
+            this.errorText.gameObject.SetActive(true);
+
+            return;
+        }
+
+        this.errorText.gameObject.SetActive(false);
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.LoadFiles(_filePath));
     }
 
     public void OnExampleAudioClick()
     {
+        this.errorText.gameObject.SetActive(false);
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.UseDemoFiles());
     }
 
@@ -555,6 +586,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.songTitleText.text = AudioManager.Instance.audioSource.clip.name;
         this.visTitleText.text = this.visNameList[DemoManager.Instance.currentVisualization];
     }
+
 
     #endregion
 }
