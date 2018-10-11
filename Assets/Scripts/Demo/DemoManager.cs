@@ -105,8 +105,8 @@ public class DemoManager : MonoSingleton<DemoManager>
                 // Check if the demo UI is currently active
                 if (CanvasManager.Instance.isDemoUiActive)
                 {
-                    CanvasManager.Instance.ToggleDemoUI(false);
                     Cursor.visible = false;
+                    yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleDemoUI(false));
                 }
             }
             // Mouse input is not idle
@@ -115,8 +115,8 @@ public class DemoManager : MonoSingleton<DemoManager>
                 // Check if the demo UI is currently inactive
                 if (!CanvasManager.Instance.isDemoUiActive)
                 {
-                    CanvasManager.Instance.ToggleDemoUI(true);
                     Cursor.visible = true;
+                    yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleDemoUI(true));
                 }
             }
 

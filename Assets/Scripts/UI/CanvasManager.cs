@@ -53,7 +53,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     [Header("ToggledContainers")]
     public CanvasGroup sideButtonGroup;
     public CanvasGroup mediaControlsGroup;
-    public CanvasGroup settingsGroup;
     public CanvasGroup visualizationGroup;
     public CanvasGroup libraryGroup;
 
@@ -477,49 +476,44 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         yield return null;
     }
 
-    public void ToggleDemoUI(bool _isActive)
+
+    public IEnumerator ToggleDemoUI(bool _isActive)
     {
-        this.isDemoUiActive = _isActive;
-
-        if (this.toggleUiRoutine != null)
+        if (_isActive)
         {
-            this.StopCoroutine(this.toggleUiRoutine);
-        }
+            Debug.Log("Start Fading in UI");
 
-        this.toggleUiRoutine = this.ToggleDemoUI();
-        this.StartCoroutine(this.toggleUiRoutine);
-    }
-
-    public IEnumerator ToggleDemoUI()
-    {
-        if (this.isDemoUiActive)
-        {
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.sideButtonGroup, this.demoUiFadeInTime, 1.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.mediaControlsGroup, this.demoUiFadeInTime, 1.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
-                this.settingsGroup, this.demoUiFadeInTime, 1.0f));
+                this.settingsPanelList[DemoManager.Instance.currentVisualization].canvasGroup, this.demoUiFadeInTime, 1.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.visualizationGroup, this.demoUiFadeInTime, 1.0f));
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.libraryGroup, this.demoUiFadeInTime, 1.0f));
+
+            Debug.Log("Finish Fading in UI");
         }
         else
         {
+            Debug.Log("Start Fading out UI");
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.sideButtonGroup, this.demoUiFadeOutTime, 0.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.mediaControlsGroup, this.demoUiFadeOutTime, 0.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
-                this.settingsGroup, this.demoUiFadeOutTime, 0.0f));
+                this.settingsPanelList[DemoManager.Instance.currentVisualization].canvasGroup, this.demoUiFadeOutTime, 0.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.visualizationGroup, this.demoUiFadeOutTime, 0.0f));
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.libraryGroup, this.demoUiFadeOutTime, 0.0f));
+
+            Debug.Log("Finish fading out UI");
         }
 
-        this.toggleUiRoutine = null;
+        this.isDemoUiActive = _isActive;
 
         yield return null;
     }

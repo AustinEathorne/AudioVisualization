@@ -599,6 +599,17 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 22696556}
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!225 &22696562
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 22696559}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &28972422
 GameObject:
   m_ObjectHideFlags: 0
@@ -1914,6 +1925,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1608884299358210, guid: e3e22ae5dd48fc1499fea903fdfc88ad,
     type: 2}
   m_PrefabInternal: {fileID: 156897980}
+--- !u!225 &156897986
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 156897985}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &162688134
 GameObject:
   m_ObjectHideFlags: 0
@@ -4357,6 +4379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1007055842}
+  canvasGroup: {fileID: 1007055845}
   visualization: {fileID: 414405919}
   minScaleSlider: {fileID: 1007055844}
   minScaleText: {fileID: 1007055843}
@@ -4528,11 +4551,10 @@ MonoBehaviour:
   escapeContainer: {fileID: 1405786299}
   sideButtonGroup: {fileID: 264790638}
   mediaControlsGroup: {fileID: 565627399}
-  settingsGroup: {fileID: 1289862257}
   visualizationGroup: {fileID: 1825492158}
   libraryGroup: {fileID: 1281058243}
-  demoUiFadeOutTime: 1
-  demoUiFadeInTime: 0.5
+  demoUiFadeOutTime: 0.5
+  demoUiFadeInTime: 0.1
   isDemoUiActive: 1
 --- !u!1 &441831991
 GameObject:
@@ -4980,6 +5002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 156897985}
+  canvasGroup: {fileID: 156897986}
   visualization: {fileID: 502388867}
   minScaleSlider: {fileID: 156897984}
   minScaleText: {fileID: 156897983}
@@ -7551,6 +7574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 22696559}
+  canvasGroup: {fileID: 22696562}
   visualization: {fileID: 831963158}
   minScaleSlider: {fileID: 22696560}
   minScaleText: {fileID: 22696561}
@@ -9338,7 +9362,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &992027691
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9391,7 +9415,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ERROR ERROR ERRRRRRORRRR
+  m_Text: 
 --- !u!222 &992027693
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9620,6 +9644,17 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1007055839}
   m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!225 &1007055845
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1007055842}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1064128047
 GameObject:
   m_ObjectHideFlags: 0
@@ -10849,6 +10884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1960700143}
+  canvasGroup: {fileID: 1960700145}
   visualization: {fileID: 1096699313}
   minScaleSlider: {fileID: 1378473627}
   minScaleText: {fileID: 1134555295}
@@ -12880,7 +12916,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1289862256}
-  - component: {fileID: 1289862257}
   m_Layer: 0
   m_Name: SettingsPanelsContainer
   m_TagString: Untagged
@@ -12910,17 +12945,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!225 &1289862257
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1289862255}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!1001 &1310321824
 Prefab:
   m_ObjectHideFlags: 0
@@ -17486,6 +17510,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224345005111119448, guid: e3e22ae5dd48fc1499fea903fdfc88ad,
     type: 2}
   m_PrefabInternal: {fileID: 238917672}
+--- !u!225 &1960700145
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1960700143}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1967847475
 GameObject:
   m_ObjectHideFlags: 0
