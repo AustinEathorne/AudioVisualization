@@ -230,6 +230,12 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo());
     }
 
+
+    public void OnChannelBarUpdate(float _value)
+    {
+        AudioManager.Instance.audioSource.panStereo = _value;
+    }
+
     #endregion
 
     #region UI

@@ -17,6 +17,8 @@ public class SettingsPanel512Samples : SettingsPanelBase
     public Slider scaleMultiplierSlider;
     public Text scaleMultiplierText;
     public Dropdown channelDropdown;
+    public Slider channelSlider;
+    public Text channelText;
 
     #region Main
 
@@ -37,22 +39,7 @@ public class SettingsPanel512Samples : SettingsPanelBase
         this.scaleMultiplierSlider.value = this.visualization.scaleMultiplier;
         this.scaleMultiplierText.text = this.visualization.scaleMultiplier.ToString();
 
-        // TODO: remove temp check
-        if (this.channelDropdown)
-        {
-            if (AudioManager.Instance.audioSource.panStereo == 0)
-            {
-                this.channelDropdown.value = 0;
-            }
-            else if (AudioManager.Instance.audioSource.panStereo == -1)
-            {
-                this.channelDropdown.value = 1;
-            }
-            else
-            {
-                this.channelDropdown.value = 2;
-            }
-        }
+        this.channelSlider.value = AudioManager.Instance.audioSource.panStereo;
 
         yield return null;
     }
@@ -90,10 +77,9 @@ public class SettingsPanel512Samples : SettingsPanelBase
         this.visualization.SetScaleMultiplier(_value);
     }
 
-    public void OnChannelSelect(int _channel)
+    public void OnChannelUpdate(float _value)
     {
-        this.visualization.channel = (Channel)_channel;
-        AudioManager.Instance.SetStereoPan((Channel)_channel);
+        this.channelText.text = this.channelSlider.value.ToString();
     }
 
     #endregion
