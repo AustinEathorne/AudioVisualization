@@ -616,7 +616,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 22696559}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -1953,7 +1953,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 156897985}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -5011,6 +5011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1007055842}
   canvasGroup: {fileID: 1007055845}
+  panelFadeTime: 0.2
   visualization: {fileID: 414405919}
   minScaleSlider: {fileID: 1007055844}
   minScaleText: {fileID: 1007055843}
@@ -5188,6 +5189,7 @@ MonoBehaviour:
   visualizationGroup: {fileID: 1825492158}
   libraryGroup: {fileID: 1281058243}
   titleGroup: {fileID: 1416291989}
+  sidePanelFadeTime: 0.2
   demoUiFadeOutTime: 0.5
   demoUiFadeInTime: 0.1
   isDemoUiActive: 1
@@ -5683,6 +5685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 156897985}
   canvasGroup: {fileID: 156897986}
+  panelFadeTime: 0.2
   visualization: {fileID: 502388867}
   minScaleSlider: {fileID: 156897984}
   minScaleText: {fileID: 156897983}
@@ -8661,6 +8664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 22696559}
   canvasGroup: {fileID: 22696562}
+  panelFadeTime: 0.2
   visualization: {fileID: 831963158}
   minScaleSlider: {fileID: 22696560}
   minScaleText: {fileID: 22696561}
@@ -10940,7 +10944,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1007055842}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -12174,6 +12178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1960700143}
   canvasGroup: {fileID: 1960700145}
+  panelFadeTime: 0.2
   visualization: {fileID: 1096699313}
   minScaleSlider: {fileID: 1378473627}
   minScaleText: {fileID: 1134555295}
@@ -19886,7 +19891,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1960700143}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

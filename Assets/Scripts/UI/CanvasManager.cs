@@ -58,6 +58,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public CanvasGroup libraryGroup;
     public CanvasGroup titleGroup;
 
+    public float sidePanelFadeTime;
     public float demoUiFadeOutTime;
     public float demoUiFadeInTime;
     public bool isDemoUiActive;
@@ -383,13 +384,18 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         if (this.visualizationPanel.activeSelf)
         {
+            
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.visualizationGroup, this.sidePanelFadeTime, 0.0f));
             this.visualizationPanel.SetActive(false);
+
             yield return this.StartCoroutine(this.ShiftSideButtons(1, false));
         }
         else
         {
             yield return this.StartCoroutine(this.ShiftSideButtons(1, true));
+
             this.visualizationPanel.SetActive(true);
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.visualizationGroup, this.sidePanelFadeTime, 1.0f));
         }
 
         yield return null;
