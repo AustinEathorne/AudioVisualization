@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class CanvasManager : MonoSingleton<CanvasManager>
 {
     [Header("StartScreen")]
-    public CanvasGroup startScreenGroup;
+    public CanvasGroup startScreenContentGroup;
     public GameObject startSceenContainer;
     public Text startScreenErrorText;
+    public Image startScreenBG;
 
     public float startScreenFadeTime;
 
@@ -257,10 +258,17 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public IEnumerator CloseStartScreen(bool _isUsingExampleAudio, string _filePath)
     {
-        this.startScreenGroup.interactable = false;
-        yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.startScreenGroup, this.startScreenFadeTime, 0.0f));
+        this.startScreenContentGroup.interactable = false;
+
+        UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.startScreenContentGroup, this.startScreenFadeTime, 0.0f));
         this.startScreenErrorText.gameObject.SetActive(false);
-        this.startScreenGroup.blocksRaycasts = false;
+
+        yield return new WaitForSeconds(this.startScreenFadeTime);
+
+        UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.startScreenBG, this.startScreenFadeTime, 0.0f));
+        this.startScreenBG.raycastTarget = false;
+
+        this.startScreenContentGroup.blocksRaycasts = false;
 
         yield return null;
     }
@@ -476,7 +484,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => this.OnSongSelectClick(_index));
 
-        Debug.Log("Added button for song: " + _index.ToString());
+        //Debug.Log("Added button for song: " + _index.ToString());
 
         yield return null;
     }
