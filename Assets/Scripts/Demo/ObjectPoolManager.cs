@@ -94,7 +94,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     {
         if (this.pooledObjectsDictionary.ContainsKey(_type))
         {
-            _obj.transform.parent = null;
+            _obj.transform.SetParent(null);
             _obj.transform.position = new Vector3(1000.0f, 1000.0f, 0.0f);
             this.pooledObjectsDictionary[_type].Enqueue(_obj);
         }

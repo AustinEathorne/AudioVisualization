@@ -187,9 +187,14 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.LoadFiles(_filePath));
     }
 
+    public void OnExampleAudioClick()
+    {
+        DemoManager.Instance.StartCoroutine(DemoManager.Instance.UseDemoFiles());
+    }
+
     public void OnSongSelectClick(int _index)
     {
-        Debug.Log("Select Song: " + _index.ToString());
+        //Debug.Log("Select Song: " + _index.ToString());
         AudioManager.Instance.ChangeSong(_index);
         this.ResetSearchBar();
         this.UpdateDemoTitleText();
@@ -225,7 +230,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo(_filePath));
     }
 
-    public void OnUseExampleAudioClick()
+    public void OnStartExampleAudioClick()
     {
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.StartDemo());
     }

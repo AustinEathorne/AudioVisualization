@@ -30,14 +30,7 @@ public class DemoManager : MonoSingleton<DemoManager>
     // Using example audio
     public IEnumerator StartDemo()
     {
-        // Set audio manager song list and add song select buttons
-        for (int i = 0; i < AudioManager.Instance.exampleSongs.Count; i++)
-        {
-            AudioManager.Instance.songs.Add(AudioManager.Instance.exampleSongs[i]);
-
-            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(
-                i, AudioManager.Instance.exampleSongs[i].name));
-        }
+        yield return this.StartCoroutine(this.UseDemoFiles());
 
         // Run
         this.StartCoroutine(this.Run());
@@ -105,8 +98,11 @@ public class DemoManager : MonoSingleton<DemoManager>
                 CanvasManager.Instance.ToggleEscapeContainer();
             }
 
-            // Mouse input is idle
-            if (this.CheckForIdleMouse())
+            this.CheckForMouseInput();
+            this.CheckForKeyInput();
+
+
+            if (this.IsIdle())
             {
                 // Check if the demo UI is currently active
                 if (CanvasManager.Instance.isDemoUiActive)
@@ -195,19 +191,28 @@ public class DemoManager : MonoSingleton<DemoManager>
         return false;
     }
 
-    public bool CheckForIdleMouse()
+    public void CheckForMouseInput()
     {
         Vector2 mousePos = Input.mousePosition;
 
-        if (mousePos == this.lastMousePosition)
-        {
-            this.idleTimeCount += Time.deltaTime;
-        }
-        else
+        if (mousePos != this.lastMousePosition)
         {
             this.lastMousePosition = mousePos;
             this.idleTimeCount = 0.0f;
         }
+    }
+
+    public void CheckForKeyInput()
+    {
+        if (Input.anyKey) // includes mouse clicks
+        {
+            this.idleTimeCount = 0.0f;
+        }
+    }
+
+    public bool IsIdle()
+    {
+        this.idleTimeCount += Time.deltaTime;
 
         if (this.idleTimeCount >= this.timeToIdle)
         {
@@ -253,6 +258,23 @@ public class DemoManager : MonoSingleton<DemoManager>
 
         // Re-start run routine
         //this.StartCoroutine(this.Run());
+
+        yield return null;
+    }
+
+    public IEnumerator UseDemoFiles()
+    {
+        AudioManager.Instance.songs.Clear();
+        yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ClearSongSelection());
+
+        // Set audio manager song list and add song select buttons
+        for (int i = 0; i < AudioManager.Instance.exampleSongs.Count; i++)
+        {
+            AudioManager.Instance.songs.Add(AudioManager.Instance.exampleSongs[i]);
+
+            yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(
+                i, AudioManager.Instance.exampleSongs[i].name));
+        }
 
         yield return null;
     }
