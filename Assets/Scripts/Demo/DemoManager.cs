@@ -231,6 +231,9 @@ public class DemoManager : MonoSingleton<DemoManager>
         // Stop everything
         //yield return this.StartCoroutine(this.Stop());
 
+        CanvasManager.Instance.filePathInputField.interactable = false;
+        CanvasManager.Instance.exampleAudioButton.interactable = false;
+
         // Get all mp3 file paths
         List<string> filePathList = new List<string>();
         if (this.IsValidPath(_filepath))
@@ -256,6 +259,9 @@ public class DemoManager : MonoSingleton<DemoManager>
             count++;
         }
 
+        CanvasManager.Instance.filePathInputField.interactable = true;
+        CanvasManager.Instance.exampleAudioButton.interactable = true;
+
         // Re-start run routine
         //this.StartCoroutine(this.Run());
 
@@ -264,6 +270,9 @@ public class DemoManager : MonoSingleton<DemoManager>
 
     public IEnumerator UseDemoFiles()
     {
+        CanvasManager.Instance.filePathInputField.interactable = false;
+        CanvasManager.Instance.exampleAudioButton.interactable = false;
+
         AudioManager.Instance.songs.Clear();
         yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ClearSongSelection());
 
@@ -275,6 +284,9 @@ public class DemoManager : MonoSingleton<DemoManager>
             yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.AddSongSelectButton(
                 i, AudioManager.Instance.exampleSongs[i].name));
         }
+
+        CanvasManager.Instance.filePathInputField.interactable = true;
+        CanvasManager.Instance.exampleAudioButton.interactable = true;
 
         yield return null;
     }

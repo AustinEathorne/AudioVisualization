@@ -2279,7 +2279,7 @@ GameObject:
   m_Component:
   - component: {fileID: 181005620}
   m_Layer: 0
-  m_Name: InputFieldContainer
+  m_Name: SongFilePathInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5198,6 +5198,8 @@ MonoBehaviour:
   - 8 Frequency Bands
   - Amplitude
   - 64 Frequency Bands
+  filePathInputField: {fileID: 945307082}
+  exampleAudioButton: {fileID: 1332141154}
 --- !u!1 &441831991
 GameObject:
   m_ObjectHideFlags: 0
@@ -6368,7 +6370,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1338500723824254, guid: f2870c9dc8b2f404fae38039c5358ba9, type: 2}
       propertyPath: m_Name
-      value: UseExampleAudioButton
+      value: UseDemoAudioButton
       objectReference: {fileID: 0}
     - target: {fileID: 114097134043264738, guid: f2870c9dc8b2f404fae38039c5358ba9,
         type: 2}
@@ -14626,6 +14628,12 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1319503858}
   m_CullTransparentMesh: 0
+--- !u!114 &1332141154 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114097134043264738, guid: f2870c9dc8b2f404fae38039c5358ba9,
+    type: 2}
+  m_PrefabInternal: {fileID: 546248269}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1339625818
 GameObject:
   m_ObjectHideFlags: 0
@@ -15097,7 +15105,7 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 1
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0

@@ -67,6 +67,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public Text visTitleText;
     public List<string> visNameList;
 
+    [Header("FilePath")]
+    public InputField filePathInputField;
+    public Button exampleAudioButton;
 
     #region Main
 
@@ -472,6 +475,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         }
 
         this.songSelectButtonList.Clear();
+        this.songSelectTextList.Clear();
 
         yield return null;
     }
@@ -482,13 +486,13 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.songSelectButtonList.Add(ObjectPoolManager.Instance.GetPooledObject(PooledObject.SongSelectButton));
         this.songSelectTextList.Add(this.songSelectButtonList[_index].GetComponentInChildren<Text>());
 
-        // Set position and scale
-        RectTransform rt = this.songSelectButtonList[_index].GetComponent<RectTransform>();
-        rt.SetParent(this.songSelectContainer);
-        rt.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-
         // Set text
         this.songSelectTextList[_index].text = _songTitle;
+
+        // Set position
+        RectTransform rt = this.songSelectButtonList[_index].GetComponent<RectTransform>();
+        rt.SetParent(this.songSelectContainer);
+        rt.localPosition = Vector3.zero;
 
         // Update button OnClick event
         Button button = this.songSelectButtonList[_index].GetComponent<Button>();
