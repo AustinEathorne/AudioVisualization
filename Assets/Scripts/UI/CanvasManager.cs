@@ -150,6 +150,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnVisualizationSelectClick(int _index)
     {
+        if (_index == DemoManager.Instance.currentVisualization)
+            return;
+
         DemoManager.Instance.StartCoroutine(DemoManager.Instance.ChangeVisualization(_index));
     }
 
@@ -511,7 +514,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
         this.settingsPanelList[_index].StartCoroutine(this.settingsPanelList[_index].Initialize());
 
-        this.UpdateDemoTitleText();
+        this.UpdateDemoTitleText(_index);
 
         yield return null;
     }
@@ -593,6 +596,12 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         yield return null;
     }
 
+
+    public void UpdateDemoTitleText(int _visIndex)
+    {
+        this.songTitleText.text = AudioManager.Instance.audioSource.clip.name;
+        this.visTitleText.text = this.visNameList[_visIndex];
+    }
 
     public void UpdateDemoTitleText()
     {
