@@ -79,7 +79,7 @@ public class SettingsPanelAmplitude : SettingsPanelBase
 
     public void OnUseBandBufferToggle(bool _value)
     {
-        this.visualization.isUsingBuffer = _value;
+        this.visualization.isUsingBandBuffers = _value;
     }
 
     public void OnChannelUpdate(float _value)

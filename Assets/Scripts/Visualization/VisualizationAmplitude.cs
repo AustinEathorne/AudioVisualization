@@ -5,13 +5,10 @@ using UnityEngine;
 
 public class VisualizationAmplitude : VisualizationBase
 {
+    [Header("Container")]
     public GameObject parentContainer;
 
-    public Transform sphereTransform;
-    private Material sphereMaterial;
-
-    public Color baseEmissionColor;
-
+    [Header("Scale")]
     public float minMinScale;
     public float maxMinScale;
     public float minScale;
@@ -24,14 +21,25 @@ public class VisualizationAmplitude : VisualizationBase
     public float maxScaleMultiplier;
     public float scaleMultiplier;
 
-    public bool isUsingBuffer;
+    [Header("Buffer")]
+    public bool isUsingBandBuffers;
 
+    [Header("Cubes")]
+    public GameObject[] cubeArray = new GameObject[8];
+    public Material[] materialArray = new Material[8];
+    public Transform amplitudeCube;
+    public Material amplitudeCubeMaterial;
 
     #region Main
 
     public override IEnumerator Initialize()
     {
-        this.sphereMaterial = this.sphereTransform.GetComponent<MeshRenderer>().material;
+        for (int i = 0; i < this.cubeArray.Length; i++)
+        {
+            this.materialArray[i] = this.cubeArray[i].GetComponentInChildren<MeshRenderer>().material;
+        }
+
+        this.amplitudeCubeMaterial = this.amplitudeCube.GetComponentInChildren<MeshRenderer>().material;
 
         yield return null;
     }
@@ -44,7 +52,7 @@ public class VisualizationAmplitude : VisualizationBase
 
         while (this.isRunning)
         {
-            yield return this.StartCoroutine(this.ScaleSphere());
+            yield return this.StartCoroutine(this.ScaleCubes());
         }
 
         yield return null;
@@ -61,22 +69,59 @@ public class VisualizationAmplitude : VisualizationBase
 
     #region Visualization
 
-    public IEnumerator ScaleSphere()
+    public IEnumerator ScaleCubes()
     {
-        float scale = this.minScale;
+        float scale = 0.0f;
 
-        if (this.isUsingBuffer)
+        for (int i = 0; i < this.cubeArray.Length; i++)
         {
-            scale += AudioPeer.Instance.currentAmplitudeBuffer * this.scaleMultiplier;
+            if (this.cubeArray[i] == null)
+                continue;
+
+            if (this.isUsingBandBuffers)
+            {
+                scale = AudioPeer.Instance.bandBufferNormalized[i] * this.scaleMultiplier < this.minScale ?
+                this.minScale : this.minScale + (AudioPeer.Instance.bandBufferNormalized[i] * this.scaleMultiplier);
+
+                float colorScale = AudioPeer.Instance.bandBufferNormalized[i];
+                this.materialArray[i].SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.LinearToGammaSpace(colorScale));
+            }
+            else
+            {
+                scale = AudioPeer.Instance.frequencyBandNormalized[i] * this.scaleMultiplier < this.minScale ?
+                this.minScale : this.minScale + (AudioPeer.Instance.frequencyBandNormalized[i] * this.scaleMultiplier);
+
+                float colorScale = AudioPeer.Instance.frequencyBandNormalized[i];
+                this.materialArray[i].SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.LinearToGammaSpace(colorScale));
+            }
+
             scale = scale > this.maxScale ? this.maxScale : scale;
+
+            this.cubeArray[i].transform.localScale = new Vector3(
+                this.cubeArray[i].transform.localScale.x, scale, this.cubeArray[i].transform.localScale.z);
+        }
+
+        if (this.isUsingBandBuffers)
+        {
+            scale = AudioPeer.Instance.currentAmplitudeBuffer * this.scaleMultiplier < this.minScale ?
+            this.minScale : this.minScale + (AudioPeer.Instance.currentAmplitudeBuffer * this.scaleMultiplier);
+
+            float colorScale = AudioPeer.Instance.currentAmplitudeBuffer * 0.5f;
+            this.amplitudeCubeMaterial.SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.LinearToGammaSpace(colorScale));
         }
         else
         {
-            scale += AudioPeer.Instance.currentAmplitude * this.scaleMultiplier;
-            scale = scale > this.maxScale ? this.maxScale : scale;
+            scale = AudioPeer.Instance.currentAmplitude * this.scaleMultiplier < this.minScale ?
+            this.minScale : this.minScale + (AudioPeer.Instance.currentAmplitude * this.scaleMultiplier);
+
+            float colorScale = AudioPeer.Instance.currentAmplitude;
+            this.amplitudeCubeMaterial.SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.LinearToGammaSpace(colorScale));
         }
 
-        this.sphereTransform.localScale = new Vector3(scale, scale, scale);
+        scale = scale > this.maxScale ? this.maxScale : scale;
+
+        this.amplitudeCube.localScale = new Vector3(
+            this.amplitudeCube.transform.localScale.x, scale, amplitudeCube.transform.localScale.z);
 
         yield return null;
     }

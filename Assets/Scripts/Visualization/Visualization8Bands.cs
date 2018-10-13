@@ -24,7 +24,6 @@ public class Visualization8Bands : VisualizationBase
     public bool isUsingBandBuffers;
 
     [Header("Cubes")]
-    public Color baseEmissionColor;
     public GameObject[] cubeArray = new GameObject[8];
     public Material[] materialArray = new Material[8];
 
