@@ -44,9 +44,9 @@ public class AudioManager : MonoSingleton<AudioManager>
         {
             if(this.CheckForSongEnd())
             {
-                this.audioSource.Stop();
-                this.audioSource.time = 0.0f;
-                CanvasManager.Instance.SetPlayButtonSprite();
+                this.currentSong = this.currentSong + 1 >= this.songs.Count ? 0 : this.currentSong + 1;
+                this.ChangeSong(this.currentSong);
+                //CanvasManager.Instance.SetPlayButtonSprite();
             }
 
             yield return null;
@@ -78,6 +78,8 @@ public class AudioManager : MonoSingleton<AudioManager>
         this.audioSource.time = 0.0f;
 
         this.currentSong = _index;
+
+        CanvasManager.Instance.ResetSearchBar();
 
         this.audioSource.Play();
     }

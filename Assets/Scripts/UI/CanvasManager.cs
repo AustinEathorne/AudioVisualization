@@ -344,6 +344,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.isSearching = true;
 
         AudioManager.Instance.PauseMusic();
+        this.SetPlayButtonSprite();
 
         while (this.isSearching)
         {
@@ -353,6 +354,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         }
 
         AudioManager.Instance.PlayMusic();
+        this.SetPlayButtonSprite();
 
         yield return null;
     }
