@@ -10,6 +10,8 @@ public class VisualizationAmplitude : VisualizationBase
     public Transform sphereTransform;
     private Material sphereMaterial;
 
+    public Color baseEmissionColor;
+
     public float minMinScale;
     public float maxMinScale;
     public float minScale;

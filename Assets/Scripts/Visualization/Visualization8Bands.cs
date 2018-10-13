@@ -24,6 +24,7 @@ public class Visualization8Bands : VisualizationBase
     public bool isUsingBandBuffers;
 
     [Header("Cubes")]
+    public Color baseEmissionColor;
     public GameObject[] cubeArray = new GameObject[8];
     public Material[] materialArray = new Material[8];
 
@@ -87,16 +88,16 @@ public class Visualization8Bands : VisualizationBase
                 scale = AudioPeer.Instance.bandBufferNormalized[i] * this.scaleMultiplier < this.minScale ?
                 this.minScale : this.minScale + (AudioPeer.Instance.bandBufferNormalized[i] * this.scaleMultiplier);
 
-                float color = AudioPeer.Instance.bandBufferNormalized[i];
-                this.materialArray[i].SetColor("_EmissionColor", new Color(color, color, color));
+                float colorScale = AudioPeer.Instance.bandBufferNormalized[i];
+                this.materialArray[i].SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.LinearToGammaSpace(colorScale));
             }
             else
             {
                 scale = AudioPeer.Instance.frequencyBandNormalized[i] * this.scaleMultiplier < this.minScale ?
                 this.minScale : this.minScale + (AudioPeer.Instance.frequencyBandNormalized[i] * this.scaleMultiplier);
 
-                float color = AudioPeer.Instance.frequencyBandNormalized[i];
-                this.materialArray[i].SetColor("_EmissionColor", new Color(color, 0.0f, 1.0f));
+                float colorScale = AudioPeer.Instance.frequencyBandNormalized[i];
+                this.materialArray[i].SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.LinearToGammaSpace(colorScale));
             }
 
             scale = scale > this.maxScale ? this.maxScale : scale;

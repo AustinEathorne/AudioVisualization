@@ -28,7 +28,7 @@ public class Visualization64Bands : VisualizationBase
 
     [Header("Cubes")]
     public GameObject[] cubeArray = new GameObject[64];
-    public Material[] materialArray = new Material[64];
+    public Material[] materialArray = new Material[64];    
 
 
     #region Main
@@ -113,16 +113,16 @@ public class Visualization64Bands : VisualizationBase
                 scale = AudioPeer.Instance.bandBufferNormalized64[i] * this.scaleMultiplier < this.minScale ?
                 this.minScale : this.minScale + (AudioPeer.Instance.bandBufferNormalized64[i] * this.scaleMultiplier);
 
-                float color = AudioPeer.Instance.bandBufferNormalized64[i];
-                this.materialArray[i].SetColor("_EmissionColor", new Color(color, color, color));
+                float colorScale = AudioPeer.Instance.bandBufferNormalized64[i];
+                this.materialArray[i].SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.LinearToGammaSpace(colorScale));
             }
             else
             {
                 scale = AudioPeer.Instance.frequencyBandNormalized64[i] * this.scaleMultiplier < this.minScale ?
                 this.minScale : this.minScale + (AudioPeer.Instance.frequencyBandNormalized64[i] * this.scaleMultiplier);
 
-                float color = AudioPeer.Instance.frequencyBandNormalized64[i];
-                this.materialArray[i].SetColor("_EmissionColor", new Color(color, 0.0f, 1.0f));
+                float colorScale = AudioPeer.Instance.frequencyBandNormalized64[i];
+                this.materialArray[i].SetColor("_EmissionColor", DemoManager.Instance.baseEmissionColor * Mathf.GammaToLinearSpace(colorScale));
             }
 
             scale = scale > this.maxScale ? this.maxScale : scale;

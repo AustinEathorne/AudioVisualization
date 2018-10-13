@@ -15,6 +15,8 @@ public class DemoManager : MonoSingleton<DemoManager>
     public float timeToIdle;
     public float idleTimeCount = 0.0f;
 
+    public Color baseEmissionColor;
+
     #region Main
 
     public IEnumerator Start()
