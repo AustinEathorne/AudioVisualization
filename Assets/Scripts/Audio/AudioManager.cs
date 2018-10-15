@@ -86,6 +86,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         this.currentSong = _index;
 
         CanvasManager.Instance.ResetSearchBar();
+        CanvasManager.Instance.UpdateDemoTitleText();
 
         this.audioSource.Play();
     }

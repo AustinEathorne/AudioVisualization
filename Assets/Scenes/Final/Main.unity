@@ -5124,9 +5124,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_HighlightedColor: {r: 0.45, g: 0.45, b: 0.45, a: 1}
+    m_PressedColor: {r: 0.45, g: 0.45, b: 0.45, a: 1}
+    m_DisabledColor: {r: 0.028301895, g: 0.028301895, b: 0.028301895, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5162,7 +5162,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
-  m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
+  m_SelectionColor: {r: 0.45, g: 0.45, b: 0.45, a: 1}
   m_Text: 
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
@@ -6607,6 +6607,7 @@ MonoBehaviour:
   exampleAudioButton: {fileID: 1332141154}
   errorText: {fileID: 527286437}
   lastFilePath: 
+  colourPicker: {fileID: 230228150}
 --- !u!1 &433220130
 GameObject:
   m_ObjectHideFlags: 0
@@ -16706,8 +16707,15 @@ MonoBehaviour:
   audioSource: {fileID: 1154374617}
   songs: []
   exampleSongs:
-  - {fileID: 8300000, guid: 225ea9cba05e35943ba5e670a8e049b8, type: 3}
-  - {fileID: 8300000, guid: f6dedbb2609f94b45bdb3f79619a0614, type: 3}
+  - {fileID: 8300000, guid: 5ad7196ca301e964db2db1a66fab6021, type: 3}
+  - {fileID: 8300000, guid: 4d1bdf10907e7cd4599f010e50456ba0, type: 3}
+  - {fileID: 8300000, guid: 098a51dabc0775a49b8876683326cea6, type: 3}
+  - {fileID: 8300000, guid: 93dce78baf046194c834d916a5534bf7, type: 3}
+  - {fileID: 8300000, guid: e479807d099160141836b5e7f9e7e61b, type: 3}
+  - {fileID: 8300000, guid: 92724268dbb84fb4292a4ce45e3fe024, type: 3}
+  - {fileID: 8300000, guid: c0dcabd81c5c65c4f9b1903774c14369, type: 3}
+  - {fileID: 8300000, guid: b0e7b96ed6030c94b9ed430cb70178fc, type: 3}
+  - {fileID: 8300000, guid: 76922be3c8e978742b72b1801f4d39fd, type: 3}
   currentSong: 0
 --- !u!82 &1154374617
 AudioSource:
@@ -17562,7 +17570,7 @@ MonoBehaviour:
   lastMousePosition: {x: 0, y: 0}
   timeToIdle: 3
   idleTimeCount: 0
-  baseEmissionColor: {r: 0.7137255, g: 0.7647059, b: 0.92941177, a: 1}
+  baseEmissionColor: {r: 1, g: 0.4117647, b: 0, a: 1}
 --- !u!1 &1212729812
 GameObject:
   m_ObjectHideFlags: 0
@@ -26894,7 +26902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -26902,10 +26910,10 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 6e9886ce4dcafc148b62aa90e370c0b0, type: 3}
     m_FontSize: 14
     m_FontStyle: 2
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 0
@@ -26914,7 +26922,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: Enter Hex...
 --- !u!222 &2071663718
 CanvasRenderer:
   m_ObjectHideFlags: 0

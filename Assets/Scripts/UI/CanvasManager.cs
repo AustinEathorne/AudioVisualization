@@ -77,6 +77,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public Text errorText;
     public string lastFilePath = "";
 
+    [Header("ColourPicker")]
+    public ColorPicker colourPicker;
+
 
 
     #region Main
@@ -333,6 +336,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
         // Settings panel
         yield return this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(this.settingsPanelList[DemoManager.Instance.currentVisualization].Initialize());
+
+        // Colour picker
+        this.colourPicker.CurrentColor = DemoManager.Instance.baseEmissionColor;
 
         this.isDemoUiActive = true;
 
