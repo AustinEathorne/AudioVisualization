@@ -70,6 +70,12 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public void ChangeSong(int _index)
     {
+        // Wrap requested index
+        if (_index >= this.songs.Count)
+            _index = 0;
+        else if (_index < 0)
+            _index = this.songs.Count - 1;
+
         this.audioSource.Stop();
 
         AudioPeer.Instance.StartCoroutine(AudioPeer.Instance.ResetValues());

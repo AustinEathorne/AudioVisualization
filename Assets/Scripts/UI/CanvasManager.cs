@@ -36,7 +36,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public List<Sprite> playButtonSprites;
 
     [Header("Time Text")]
-    public Text timeText;
+    public Text currentTimeText;
+    public Text totalTimeText;
 
     [Header("Volume")]
     public float[] volumeImageThresholds = new float[3];
@@ -186,6 +187,13 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.SetVolumeSprite();
     }
 
+    public void OnSongChangeClick(int _direction)
+    {
+        AudioManager.Instance.ChangeSong(AudioManager.Instance.currentSong + _direction);
+        this.ResetSearchBar();
+        this.UpdateDemoTitleText();
+    }
+
 
     public void OnQuitClick()
     {
@@ -302,8 +310,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.UpdateDemoTitleText();
 
         // Search bar
-        this.searchBar.maxValue = AudioManager.Instance.songs[0].length;
-        this.searchBar.value = 0.0f;
+        this.ResetSearchBar();
 
         // Volume
         this.volumeSlider.value = AudioManager.Instance.audioSource.volume;
@@ -363,6 +370,11 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         this.searchBar.maxValue = AudioManager.Instance.songs[AudioManager.Instance.currentSong].length;
         this.searchBar.value = 0.0f;
+
+        float totalTime = this.searchBar.maxValue;
+        int minutes = Mathf.FloorToInt(totalTime / 60F);
+        int seconds = Mathf.FloorToInt(totalTime - minutes * 60);
+        this.totalTimeText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
     public void SetVolumeSprite()
@@ -403,7 +415,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         int minutes = Mathf.FloorToInt(time / 60F);
         int seconds = Mathf.FloorToInt(time - minutes * 60);
 
-        this.timeText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+        this.currentTimeText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
 
@@ -610,7 +622,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         this.songTitleText.text = AudioManager.Instance.audioSource.clip.name;
         this.visTitleText.text = this.visNameList[DemoManager.Instance.currentVisualization];
     }
-
 
     #endregion
 }
