@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Visualization8Bands : VisualizationBase
 {
-    [Header("Container")]
-    public Transform parentContainer;
-
     [Header("Scale")]
     public float minMinScale;
     public float maxMinScale;
@@ -48,7 +45,7 @@ public class Visualization8Bands : VisualizationBase
     {
         this.isRunning = true;
 
-        this.parentContainer.gameObject.SetActive(true);
+        this.parentTransform.gameObject.SetActive(true);
 
         while (this.isRunning)
         {
@@ -64,7 +61,7 @@ public class Visualization8Bands : VisualizationBase
     {
         this.isRunning = false;
 
-        this.parentContainer.gameObject.SetActive(false);
+        this.parentTransform.gameObject.SetActive(false);
 
         yield return null;
     }

@@ -20,6 +20,8 @@ public class SettingsPanel8Bands : SettingsPanelBase
     public Slider channelSlider;
     public Text channelText;
 
+
+
     #region Main
 
     public override IEnumerator Initialize()

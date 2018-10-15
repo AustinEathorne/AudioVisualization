@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Visualization512Samples : VisualizationBase
 {
-    public Transform parentContainer;
-
     public Channel channel;
 
     public float minMinScale;
@@ -42,7 +40,7 @@ public class Visualization512Samples : VisualizationBase
     {
         this.isRunning = true;
 
-        this.parentContainer.gameObject.SetActive(true);
+        this.parentTransform.gameObject.SetActive(true);
 
         while (this.isRunning)
         {
@@ -58,7 +56,7 @@ public class Visualization512Samples : VisualizationBase
     {
         this.isRunning = false;
 
-        this.parentContainer.gameObject.SetActive(false);
+        this.parentTransform.gameObject.SetActive(false);
 
         yield return null;
     }
@@ -79,7 +77,7 @@ public class Visualization512Samples : VisualizationBase
 
             // Instantiate cube
             ObjectInstantiater.Instance.StartCoroutine(ObjectInstantiater.Instance.InstantiatePrefab(
-                PrefabType.CubeVerticallyScaling, this.parentContainer, this.parentContainer.position, tempRotation, _obj => {
+                PrefabType.CubeVerticallyScaling, this.parentTransform, this.parentTransform.position, tempRotation, _obj => {
                     if (_obj != null)
                     {
                         this.cubeArray[i] = _obj;

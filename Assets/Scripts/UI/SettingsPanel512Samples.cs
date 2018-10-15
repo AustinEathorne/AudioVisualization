@@ -16,7 +16,6 @@ public class SettingsPanel512Samples : SettingsPanelBase
     public Text maxScaleText;
     public Slider scaleMultiplierSlider;
     public Text scaleMultiplierText;
-    public Dropdown channelDropdown;
     public Slider channelSlider;
     public Text channelText;
 
