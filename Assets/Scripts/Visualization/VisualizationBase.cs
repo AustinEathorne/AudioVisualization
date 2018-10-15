@@ -4,4 +4,7 @@ using UnityEngine;
 
 public abstract class VisualizationBase : Mono<VisualizationBase>
 {
+    [Header("Parent")]
+    [SerializeField]
+    protected Transform parentTransform;
 }

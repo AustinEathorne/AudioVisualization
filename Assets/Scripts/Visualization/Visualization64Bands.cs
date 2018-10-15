@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Visualization64Bands : VisualizationBase
 {
-    [Header("Container")]
-    public Transform parentContainer;
-
     [Header("Scale")]
     public float minMinScale;
     public float maxMinScale;
@@ -48,7 +45,7 @@ public class Visualization64Bands : VisualizationBase
     {
         this.isRunning = true;
 
-        this.parentContainer.gameObject.SetActive(true);
+        this.parentTransform.gameObject.SetActive(true);
 
         while (this.isRunning)
         {
@@ -64,7 +61,7 @@ public class Visualization64Bands : VisualizationBase
     {
         this.isRunning = false;
 
-        this.parentContainer.gameObject.SetActive(false);
+        this.parentTransform.gameObject.SetActive(false);
 
         yield return null;
     }
@@ -84,7 +81,7 @@ public class Visualization64Bands : VisualizationBase
         {
             // Instantiate cube
             ObjectInstantiater.Instance.StartCoroutine(ObjectInstantiater.Instance.InstantiatePrefab(
-                PrefabType.CubeVerticallyScaling, this.parentContainer, this.parentContainer.position, new Quaternion(), _obj => {
+                PrefabType.CubeVerticallyScaling, this.parentTransform, this.parentTransform.position, new Quaternion(), _obj => {
                     if (_obj != null)
                     {
                         this.cubeArray[i] = _obj;

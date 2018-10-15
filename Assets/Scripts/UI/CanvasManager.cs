@@ -59,6 +59,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public CanvasGroup visualizationGroup;
     public CanvasGroup libraryGroup;
     public CanvasGroup titleGroup;
+    public CanvasGroup colourPickerGroup;
 
     public float sidePanelFadeTime;
     public float demoUiFadeOutTime;
@@ -75,6 +76,10 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public Button exampleAudioButton;
     public Text errorText;
     public string lastFilePath = "";
+
+    [Header("ColourPicker")]
+    public ColorPicker colourPicker;
+
 
 
     #region Main
@@ -300,6 +305,19 @@ public class CanvasManager : MonoSingleton<CanvasManager>
         AudioManager.Instance.audioSource.panStereo = _value;
     }
 
+
+    public void OnColourPanelToggle(bool _isActive)
+    {
+        this.sideButtonImages[0].enabled = _isActive ? false : true;
+
+        this.settingsPanelList[DemoManager.Instance.currentVisualization].OnColourPanelToggle(_isActive);
+    }
+
+    public void OnBaseColourChange(Color _color)
+    {
+        DemoManager.Instance.baseEmissionColor = _color;
+    }
+
     #endregion
 
     #region UI
@@ -318,6 +336,9 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
         // Settings panel
         yield return this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(this.settingsPanelList[DemoManager.Instance.currentVisualization].Initialize());
+
+        // Colour picker
+        this.colourPicker.CurrentColor = DemoManager.Instance.baseEmissionColor;
 
         this.isDemoUiActive = true;
 
@@ -586,6 +607,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
                 this.settingsPanelList[DemoManager.Instance.currentVisualization].canvasGroup, this.demoUiFadeInTime, 1.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.visualizationGroup, this.demoUiFadeInTime, 1.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+               this.colourPickerGroup, this.demoUiFadeInTime, 1.0f));
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.libraryGroup, this.demoUiFadeInTime, 1.0f));
         }
@@ -601,6 +624,8 @@ public class CanvasManager : MonoSingleton<CanvasManager>
                 this.settingsPanelList[DemoManager.Instance.currentVisualization].canvasGroup, this.demoUiFadeOutTime, 0.0f));
             UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.visualizationGroup, this.demoUiFadeOutTime, 0.0f));
+            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
+                this.colourPickerGroup, this.demoUiFadeOutTime, 0.0f));
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(
                 this.libraryGroup, this.demoUiFadeOutTime, 0.0f));
         }

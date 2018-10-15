@@ -20,6 +20,7 @@ public class SettingsPanel64Bands : SettingsPanelBase
     public Text channelText;
 
 
+
     #region Main
 
     public override IEnumerator Initialize()

@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class VisualizationAmplitude : VisualizationBase
 {
-    [Header("Container")]
-    public GameObject parentContainer;
-
     [Header("Scale")]
     public float minMinScale;
     public float maxMinScale;
@@ -48,7 +45,7 @@ public class VisualizationAmplitude : VisualizationBase
     {
         this.isRunning = true;
 
-        this.parentContainer.SetActive(true);
+        this.parentTransform.gameObject.SetActive(true);
 
         while (this.isRunning)
         {
@@ -61,7 +58,7 @@ public class VisualizationAmplitude : VisualizationBase
     public override IEnumerator Stop()
     {
         this.isRunning = false;
-        this.parentContainer.SetActive(false);
+        this.parentTransform.gameObject.SetActive(false);
         yield return null;
     }
 
