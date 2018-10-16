@@ -6540,7 +6540,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1007055842}
   canvasGroup: {fileID: 1007055845}
-  panelFadeTime: 0.2
   colourPickerGroup: {fileID: 1781781198}
   visualization: {fileID: 414405919}
   minScaleSlider: {fileID: 1007055844}
@@ -7356,7 +7355,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 156897985}
   canvasGroup: {fileID: 156897986}
-  panelFadeTime: 0.2
   colourPickerGroup: {fileID: 1781781198}
   visualization: {fileID: 502388867}
   minScaleSlider: {fileID: 156897984}
@@ -12038,7 +12036,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 22696559}
   canvasGroup: {fileID: 22696562}
-  panelFadeTime: 0.2
   colourPickerGroup: {fileID: 1781781198}
   visualization: {fileID: 831963158}
   minScaleSlider: {fileID: 22696560}
@@ -16087,7 +16084,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 1960700143}
   canvasGroup: {fileID: 1960700145}
-  panelFadeTime: 0.2
   colourPickerGroup: {fileID: 1781781198}
   visualization: {fileID: 1096699313}
   minScaleSlider: {fileID: 1378473627}
@@ -21777,7 +21773,7 @@ Prefab:
     - target: {fileID: 224316867015889240, guid: e4f5e9ff729335743b18d52e6f92daa8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -55
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 224316867015889240, guid: e4f5e9ff729335743b18d52e6f92daa8,
         type: 2}

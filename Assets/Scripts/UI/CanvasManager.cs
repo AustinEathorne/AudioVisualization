@@ -308,9 +308,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnColourPanelToggle(bool _isActive)
     {
-        this.sideButtonImages[0].enabled = _isActive ? false : true;
-
-        this.settingsPanelList[DemoManager.Instance.currentVisualization].OnColourPanelToggle(_isActive);
+        this.StartCoroutine(this.ToggleColourSelectPanel(_isActive));
     }
 
     public void OnBaseColourChange(Color _color)
@@ -491,7 +489,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         if (this.visualizationPanel.activeSelf)
         {
-            
             yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.visualizationGroup, this.sidePanelFadeTime, 0.0f));
             this.visualizationPanel.SetActive(false);
 
@@ -512,13 +509,16 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         if (this.libraryPanel.activeSelf)
         {
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.libraryGroup, this.sidePanelFadeTime, 0.0f));
             this.libraryPanel.SetActive(false);
             yield return this.StartCoroutine(this.ShiftSideButtons(2, false));
         }
         else
         {
             yield return this.StartCoroutine(this.ShiftSideButtons(2, true));
+
             this.libraryPanel.SetActive(true);
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.libraryGroup, this.sidePanelFadeTime, 1.0f));
         }
 
         yield return null;
@@ -671,6 +671,33 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         this.songTitleText.text = AudioManager.Instance.audioSource.clip.name;
         this.visTitleText.text = this.visNameList[DemoManager.Instance.currentVisualization];
+    }
+
+
+    public IEnumerator ToggleColourSelectPanel(bool _isActive)
+    {
+        if (_isActive)
+        {
+            // Fade out settings button
+            UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.sideButtonImages[0], this.sidePanelFadeTime, 0.0f));
+
+            // Fade out current settings panel + fade in colour select panel
+            yield return this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(
+                this.settingsPanelList[DemoManager.Instance.currentVisualization].ToggleColourPanel(true));
+        }
+        else
+        {
+            // Fade out colour select panel + fade in curernt settings panel
+            this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(
+                this.settingsPanelList[DemoManager.Instance.currentVisualization].ToggleColourPanel(false));
+
+            // Fade in settings button
+            yield return UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.sideButtonImages[0], this.sidePanelFadeTime, 1.0f));
+        }
+
+        yield return null;
     }
 
     #endregion
