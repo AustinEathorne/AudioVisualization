@@ -1484,10 +1484,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 594193648}
   m_HandleRect: {fileID: 1692642075}
   m_Direction: 0
-  m_MinValue: 500
-  m_MaxValue: 2500
+  m_MinValue: 3000
+  m_MaxValue: 10000
   m_WholeNumbers: 1
-  m_Value: 1500
+  m_Value: 5000
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -5705,7 +5705,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1084051234}
   m_Direction: 0
   m_MinValue: 5
-  m_MaxValue: 25
+  m_MaxValue: 20
   m_WholeNumbers: 1
   m_Value: 15
   m_OnValueChanged:
@@ -6566,11 +6566,11 @@ MonoBehaviour:
   minMinScale: 0.1
   maxMinScale: 1
   minScale: 0.1
-  minMaxScale: 10
-  maxMaxScale: 20
+  minMaxScale: 5
+  maxMaxScale: 15
   maxScale: 15
   minScaleMultiplier: 5
-  maxScaleMultiplier: 25
+  maxScaleMultiplier: 20
   scaleMultiplier: 15
   isUsingBandBuffers: 1
   cubeArray:
@@ -7381,7 +7381,7 @@ MonoBehaviour:
   maxMinScale: 1
   minScale: 0.1
   minMaxScale: 5
-  maxMaxScale: 50
+  maxMaxScale: 30
   maxScale: 30
   minScaleMultiplier: 15
   maxScaleMultiplier: 100
@@ -7805,7 +7805,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 960638192}
   m_HandleRect: {fileID: 1446573519}
   m_Direction: 0
-  m_MinValue: 100
+  m_MinValue: 80
   m_MaxValue: 180
   m_WholeNumbers: 1
   m_Value: 180
@@ -10694,7 +10694,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 139359215}
   m_Direction: 0
   m_MinValue: 5
-  m_MaxValue: 50
+  m_MaxValue: 30
   m_WholeNumbers: 1
   m_Value: 30
   m_OnValueChanged:
@@ -12062,11 +12062,11 @@ MonoBehaviour:
   minMinScale: 0.1
   maxMinScale: 1
   minScale: 0.1
-  minMaxScale: 10
-  maxMaxScale: 20
+  minMaxScale: 5
+  maxMaxScale: 15
   maxScale: 15
   minScaleMultiplier: 5
-  maxScaleMultiplier: 25
+  maxScaleMultiplier: 20
   scaleMultiplier: 15
   isUsingBandBuffers: 1
   cubeArray:
@@ -15039,12 +15039,12 @@ MonoBehaviour:
   minMinScale: 0.1
   maxMinScale: 1
   minScale: 0.1
-  minMaxScale: 100
+  minMaxScale: 80
   maxMaxScale: 180
   maxScale: 180
-  minScaleMultiplier: 500
-  maxScaleMultiplier: 2500
-  scaleMultiplier: 1500
+  minScaleMultiplier: 3000
+  maxScaleMultiplier: 10000
+  scaleMultiplier: 5000
   cubeArray:
   - {fileID: 0}
   - {fileID: 0}
@@ -17263,7 +17263,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1750073124}
   m_Direction: 0
   m_MinValue: 5
-  m_MaxValue: 25
+  m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 15
   m_OnValueChanged:
@@ -18279,9 +18279,9 @@ MonoBehaviour:
   m_FillRect: {fileID: 1242918665}
   m_HandleRect: {fileID: 937537181}
   m_Direction: 0
-  m_MinValue: 10
-  m_MaxValue: 20
-  m_WholeNumbers: 0
+  m_MinValue: 5
+  m_MaxValue: 15
+  m_WholeNumbers: 1
   m_Value: 15
   m_OnValueChanged:
     m_PersistentCalls:
@@ -25999,8 +25999,8 @@ MonoBehaviour:
   m_FillRect: {fileID: 1944588567}
   m_HandleRect: {fileID: 900600558}
   m_Direction: 0
-  m_MinValue: 10
-  m_MaxValue: 20
+  m_MinValue: 5
+  m_MaxValue: 15
   m_WholeNumbers: 1
   m_Value: 15
   m_OnValueChanged:
