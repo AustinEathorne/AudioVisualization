@@ -78,6 +78,9 @@ public class DemoManager : MonoSingleton<DemoManager>
 
         }
 
+        // Bring up start screen
+        yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.OpenStartScreen());
+
         this.isInitialized = true;
 
         yield return null;
@@ -118,7 +121,7 @@ public class DemoManager : MonoSingleton<DemoManager>
             else
             {
                 // Check if the demo UI and escape panel are currently inactive
-                if (!CanvasManager.Instance.isDemoUiActive && !CanvasManager.Instance.escapeContainer.gameObject.activeSelf)
+                if (!CanvasManager.Instance.isDemoUiActive && !CanvasManager.Instance.exitPanelGroup.gameObject.activeSelf)
                 {
                     Cursor.visible = true;
                     yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleDemoUI(true));

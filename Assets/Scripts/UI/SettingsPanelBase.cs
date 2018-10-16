@@ -16,22 +16,8 @@ public abstract class SettingsPanelBase : Mono<SettingsPanelBase>
 
     public void TogglePanel()
     {
-        // Turn on
-        if (!this.settingsPanel.activeSelf)
-        {
-            // Turn on panel
-            this.settingsPanel.SetActive(true);
-
-            // Fade in panel
-            UIUtility.Instance.StartCoroutine(
-                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeTime, 1.0f));
-
-            // Enable panel
-            this.canvasGroup.interactable = true;
-            this.canvasGroup.blocksRaycasts = true;
-        }
         // Turn off
-        else
+        if (this.settingsPanel.activeSelf)
         {
             // Disable panel
             this.canvasGroup.interactable = false;
@@ -39,10 +25,24 @@ public abstract class SettingsPanelBase : Mono<SettingsPanelBase>
 
             // Fade out panel
             UIUtility.Instance.StartCoroutine(
-                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeTime, 0.0f));
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeOutTime, 0.0f));
 
             // Turn off panel
             this.settingsPanel.SetActive(false);
+        }
+        // Turn on
+        else
+        {
+            // Turn on panel
+            this.settingsPanel.SetActive(true);
+
+            // Fade in panel
+            UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeInTime, 1.0f));
+
+            // Enable panel
+            this.canvasGroup.interactable = true;
+            this.canvasGroup.blocksRaycasts = true;
         }
     }
 
@@ -53,7 +53,7 @@ public abstract class SettingsPanelBase : Mono<SettingsPanelBase>
         {
             // Fade out and turn off main panel
             yield return UIUtility.Instance.StartCoroutine(
-                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeTime, 0.0f));
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeInTime, 0.0f));
             this.canvasGroup.gameObject.SetActive(false);
 
             // Enable and turn on colour panel
@@ -74,9 +74,9 @@ public abstract class SettingsPanelBase : Mono<SettingsPanelBase>
             // Tur on and fade in main panel
             this.canvasGroup.gameObject.SetActive(true);
             yield return UIUtility.Instance.StartCoroutine(
-                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeTime, 1.0f));
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeOutTime, 1.0f));
 
-            // Enable panel
+            // Enable main panel
             this.canvasGroup.interactable = true;
             this.canvasGroup.blocksRaycasts = true;
         }

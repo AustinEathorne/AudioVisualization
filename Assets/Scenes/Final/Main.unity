@@ -58,7 +58,7 @@ LightmapSettings:
     serializedVersion: 10
     m_Resolution: 10
     m_BakeResolution: 50
-    m_AtlasSize: 512
+    m_AtlasSize: 256
     m_AO: 1
     m_AOMaxDistance: 1
     m_CompAOExponent: 0.1
@@ -5911,9 +5911,9 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 362838034}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1001 &363979729
 Prefab:
@@ -6733,13 +6733,6 @@ MonoBehaviour:
   startScreenErrorText: {fileID: 992027692}
   startScreenBG: {fileID: 471647065}
   startScreenFadeTime: 0.5
-  visualizationPanel: {fileID: 979186012}
-  libraryPanel: {fileID: 1184285875}
-  settingsPanelList:
-  - {fileID: 1096699314}
-  - {fileID: 414405918}
-  - {fileID: 831963157}
-  - {fileID: 502388866}
   sideButtonFadeTime: 0.1
   sideButtonMoveTime: 0.1
   sideButtonPositions:
@@ -6754,6 +6747,15 @@ MonoBehaviour:
   - {fileID: 911315904}
   - {fileID: 1656000895}
   - {fileID: 1909699139}
+  visualizationPanel: {fileID: 979186012}
+  libraryPanel: {fileID: 1184285875}
+  settingsPanelList:
+  - {fileID: 1096699314}
+  - {fileID: 414405918}
+  - {fileID: 831963157}
+  - {fileID: 502388866}
+  sidePanelFadeInTime: 0.1
+  sidePanelFadeOutTime: 0.1
   searchBar: {fileID: 1269234550}
   isSearching: 0
   playButtonImage: {fileID: 34050533}
@@ -6776,14 +6778,15 @@ MonoBehaviour:
   songSelectContainer: {fileID: 1405037744}
   songSelectButtonList: []
   songSelectTextList: []
-  escapeContainer: {fileID: 1405786301}
+  exitPanelGroup: {fileID: 1405786301}
+  exitPanelFadeInTime: 0.5
+  exitPanelFadeOutTime: 0.1
   sideButtonGroup: {fileID: 264790638}
   mediaControlsGroup: {fileID: 565627399}
   visualizationGroup: {fileID: 1825492158}
   libraryGroup: {fileID: 1281058243}
   titleGroup: {fileID: 1416291989}
   colourPickerGroup: {fileID: 1781781198}
-  sidePanelFadeTime: 0.2
   demoUiFadeOutTime: 0.5
   demoUiFadeInTime: 0.1
   isDemoUiActive: 1
@@ -20270,7 +20273,7 @@ GameObject:
   - component: {fileID: 1405786300}
   - component: {fileID: 1405786301}
   m_Layer: 5
-  m_Name: EscapeContainer
+  m_Name: ExitPanelContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
