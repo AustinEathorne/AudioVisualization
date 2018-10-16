@@ -98,7 +98,7 @@ public class DemoManager : MonoSingleton<DemoManager>
         {
             if (this.CheckForEscapeInput())
             {
-                CanvasManager.Instance.ToggleEscapeContainer();
+                yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleEscapeContainer());
             }
 
             this.CheckForMouseInput();
@@ -117,8 +117,8 @@ public class DemoManager : MonoSingleton<DemoManager>
             // Mouse input is not idle
             else
             {
-                // Check if the demo UI is currently inactive
-                if (!CanvasManager.Instance.isDemoUiActive)
+                // Check if the demo UI and escape panel are currently inactive
+                if (!CanvasManager.Instance.isDemoUiActive && !CanvasManager.Instance.escapeContainer.gameObject.activeSelf)
                 {
                     Cursor.visible = true;
                     yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleDemoUI(true));

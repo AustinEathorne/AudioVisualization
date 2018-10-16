@@ -51,7 +51,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public List<Text> songSelectTextList;
 
     [Header("Escape Container")]
-    public GameObject escapeContainer;
+    public CanvasGroup escapeContainer;
 
     [Header("ToggledContainers")]
     public CanvasGroup sideButtonGroup;
@@ -440,9 +440,34 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     }
 
 
-    public void ToggleEscapeContainer()
+    public IEnumerator ToggleEscapeContainer()
     {
-        this.escapeContainer.SetActive(!this.escapeContainer.activeSelf);
+        // Turn off exit panel UI, turn on demo UI
+        if (this.escapeContainer.gameObject.activeSelf)
+        {
+            this.escapeContainer.interactable = false;
+            this.escapeContainer.blocksRaycasts = false;
+
+            UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.escapeContainer, this.demoUiFadeOutTime, 0.0f));
+            yield return this.StartCoroutine(this.ToggleDemoUI(true));
+
+            this.escapeContainer.gameObject.SetActive(false);
+        }
+        // Turn on exit panel UI, turn off demo UI
+        else
+        {
+            this.escapeContainer.gameObject.SetActive(true);
+
+            this.StartCoroutine(this.ToggleDemoUI(false));
+            yield return UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.escapeContainer, this.demoUiFadeInTime, 1.0f));
+
+            this.escapeContainer.interactable = true;
+            this.escapeContainer.blocksRaycasts = true;
+        }
+
+        yield return null;
     }
 
 

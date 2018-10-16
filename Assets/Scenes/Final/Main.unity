@@ -6777,7 +6777,7 @@ MonoBehaviour:
   songSelectContainer: {fileID: 1405037744}
   songSelectButtonList: []
   songSelectTextList: []
-  escapeContainer: {fileID: 1405786299}
+  escapeContainer: {fileID: 1405786301}
   sideButtonGroup: {fileID: 264790638}
   mediaControlsGroup: {fileID: 565627399}
   visualizationGroup: {fileID: 1825492158}
@@ -20307,9 +20307,9 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1405786299}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &1415301120
 GameObject:
@@ -21832,7 +21832,7 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 5306c3a2b01e1654095c481d3cce7921,
+      objectReference: {fileID: 21300000, guid: e6df45f005648ec4bbe37ac4b54c06f7,
         type: 3}
     - target: {fileID: 114583199890035236, guid: e4f5e9ff729335743b18d52e6f92daa8,
         type: 2}
