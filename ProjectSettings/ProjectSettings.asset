@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: ALE
-  productName: AudioVisualization
+  productName: Austin's Audio Visualizer
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.07329123, g: 0.084905684, b: 0.079098456, a: 1}
