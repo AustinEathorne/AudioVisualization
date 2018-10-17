@@ -58,11 +58,11 @@ LightmapSettings:
     serializedVersion: 10
     m_Resolution: 10
     m_BakeResolution: 50
-    m_AtlasSize: 1024
+    m_AtlasSize: 2048
     m_AO: 1
-    m_AOMaxDistance: 5
+    m_AOMaxDistance: 1
     m_CompAOExponent: 0.1
-    m_CompAOExponentDirect: 0
+    m_CompAOExponentDirect: 0.15
     m_Padding: 2
     m_LightmapParameters: {fileID: 15200, guid: 0000000000000000f000000000000000,
       type: 0}
@@ -9848,8 +9848,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1385397607}
-  - {fileID: 1459007093}
   - {fileID: 1135016969}
+  - {fileID: 1459007093}
   - {fileID: 698348408}
   - {fileID: 1756902418}
   m_Father: {fileID: 47320791}
@@ -9923,7 +9923,7 @@ GameObject:
   - component: {fileID: 698348410}
   - component: {fileID: 698348409}
   m_Layer: 0
-  m_Name: Floor (3)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9971,7 +9971,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4046c5dc8f79e1c479556aeed08d475e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15060,7 +15060,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20.000275}
+  m_AnchoredPosition: {x: 0, y: -17.8}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1008935905
@@ -17279,7 +17279,7 @@ GameObject:
   - component: {fileID: 1135016971}
   - component: {fileID: 1135016970}
   m_Layer: 0
-  m_Name: Floor (2)
+  m_Name: Ceiling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17296,7 +17296,7 @@ Transform:
   m_LocalScale: {x: 5, y: 1.0000005, z: 4}
   m_Children: []
   m_Father: {fileID: 678260434}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!64 &1135016970
 MeshCollider:
@@ -17327,7 +17327,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4046c5dc8f79e1c479556aeed08d475e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -20851,7 +20851,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4046c5dc8f79e1c479556aeed08d475e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21170,7 +21170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20.000275}
+  m_AnchoredPosition: {x: 0, y: -17.8}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1414653060
@@ -21954,7 +21954,7 @@ GameObject:
   - component: {fileID: 1459007095}
   - component: {fileID: 1459007094}
   m_Layer: 0
-  m_Name: Floor (1)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21971,7 +21971,7 @@ Transform:
   m_LocalScale: {x: 2, y: 1, z: 4}
   m_Children: []
   m_Father: {fileID: 678260434}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!64 &1459007094
 MeshCollider:
@@ -22002,7 +22002,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4046c5dc8f79e1c479556aeed08d475e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22762,7 +22762,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20.000275}
+  m_AnchoredPosition: {x: 0, y: -17.8}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1580674862
@@ -24227,8 +24227,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
-  m_Range: 25
+  m_Intensity: 0.75
+  m_Range: 35
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -24523,7 +24523,7 @@ GameObject:
   - component: {fileID: 1756902420}
   - component: {fileID: 1756902419}
   m_Layer: 0
-  m_Name: Floor (4)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24571,7 +24571,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4046c5dc8f79e1c479556aeed08d475e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -27488,7 +27488,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20.000275}
+  m_AnchoredPosition: {x: 0, y: -17.8}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1939859709
@@ -27745,7 +27745,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20}
+  m_AnchoredPosition: {x: 0, y: -17.8}
   m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1965891039
