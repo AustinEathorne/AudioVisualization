@@ -8,7 +8,6 @@ public abstract class SettingsPanelBase : Mono<SettingsPanelBase>
     [Header("Panel")]
     public GameObject settingsPanel;
     public CanvasGroup canvasGroup;
-    public float panelFadeTime;
 
     [Header("ColourPicker")]
     public CanvasGroup colourPickerGroup;
@@ -17,45 +16,45 @@ public abstract class SettingsPanelBase : Mono<SettingsPanelBase>
 
     public void TogglePanel()
     {
-        // Turn on
-        if (!this.settingsPanel.activeSelf)
-        {
-            // Turn on panel
-            this.settingsPanel.SetActive(true);
-
-            // Fade in panel
-            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.canvasGroup, this.panelFadeTime, 1.0f));
-
-            // Enable panel
-            this.canvasGroup.interactable = true;
-            this.canvasGroup.blocksRaycasts = true;
-        }
         // Turn off
-        else
+        if (this.settingsPanel.activeSelf)
         {
             // Disable panel
             this.canvasGroup.interactable = false;
             this.canvasGroup.blocksRaycasts = false;
 
             // Fade out panel
-            UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.canvasGroup, this.panelFadeTime, 0.0f));
+            UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeOutTime, 0.0f));
 
             // Turn off panel
             this.settingsPanel.SetActive(false);
         }
+        // Turn on
+        else
+        {
+            // Turn on panel
+            this.settingsPanel.SetActive(true);
+
+            // Fade in panel
+            UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeInTime, 1.0f));
+
+            // Enable panel
+            this.canvasGroup.interactable = true;
+            this.canvasGroup.blocksRaycasts = true;
+        }
     }
 
-    public void OnColourPanelToggle(bool _isActive)
+    public IEnumerator ToggleColourPanel(bool _isActive)
     {
         // Turn on colour panel
         if (_isActive)
         {
-            // Disable main panel
-            this.canvasGroup.interactable = false;
-            this.canvasGroup.blocksRaycasts = false;
-
-            // Turn off main panel
-            this.settingsPanel.SetActive(false);
+            // Fade out and turn off main panel
+            yield return UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeInTime, 0.0f));
+            this.canvasGroup.gameObject.SetActive(false);
 
             // Enable and turn on colour panel
             this.colourPickerGroup.gameObject.SetActive(true);
@@ -72,12 +71,16 @@ public abstract class SettingsPanelBase : Mono<SettingsPanelBase>
             this.colourPickerGroup.alpha = 0;
             this.colourPickerGroup.gameObject.SetActive(false);
 
-            // Turn on panel
-            this.settingsPanel.SetActive(true);
+            // Tur on and fade in main panel
+            this.canvasGroup.gameObject.SetActive(true);
+            yield return UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.canvasGroup, CanvasManager.Instance.sidePanelFadeOutTime, 1.0f));
 
-            // Enable panel
+            // Enable main panel
             this.canvasGroup.interactable = true;
             this.canvasGroup.blocksRaycasts = true;
         }
+
+        yield return null;
     }
 }

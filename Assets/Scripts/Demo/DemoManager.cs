@@ -78,6 +78,9 @@ public class DemoManager : MonoSingleton<DemoManager>
 
         }
 
+        // Bring up start screen
+        yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.OpenStartScreen());
+
         this.isInitialized = true;
 
         yield return null;
@@ -94,15 +97,18 @@ public class DemoManager : MonoSingleton<DemoManager>
         // Run current visualization manager
         this.visManagerList[this.currentVisualization].StartCoroutine(this.visManagerList[this.currentVisualization].Run());
 
+        // Run timer
+        this.StartCoroutine(this.IdleTimeCounter());
+
         while (this.isRunning)
         {
             if (this.CheckForEscapeInput())
             {
-                CanvasManager.Instance.ToggleEscapeContainer();
+                yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleEscapeContainer());
             }
 
-            this.CheckForMouseInput();
-            this.CheckForKeyInput();
+            this.CheckForMouseMovementInput();
+            this.CheckForAnyKeyInput();
 
 
             if (this.IsIdle())
@@ -114,11 +120,10 @@ public class DemoManager : MonoSingleton<DemoManager>
                     yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleDemoUI(false));
                 }
             }
-            // Mouse input is not idle
             else
             {
-                // Check if the demo UI is currently inactive
-                if (!CanvasManager.Instance.isDemoUiActive)
+                // Check if the demo UI and escape panel are currently inactive
+                if (!CanvasManager.Instance.isDemoUiActive && !CanvasManager.Instance.exitPanelGroup.gameObject.activeSelf)
                 {
                     Cursor.visible = true;
                     yield return CanvasManager.Instance.StartCoroutine(CanvasManager.Instance.ToggleDemoUI(true));
@@ -151,6 +156,17 @@ public class DemoManager : MonoSingleton<DemoManager>
         yield return this.StartCoroutine(this.Stop());
 
         Application.Quit();
+
+        yield return null;
+    }
+
+    public IEnumerator IdleTimeCounter()
+    {
+        while (this.isRunning)
+        {
+            this.idleTimeCount += Time.deltaTime;
+            yield return null;
+        }
 
         yield return null;
     }
@@ -194,10 +210,9 @@ public class DemoManager : MonoSingleton<DemoManager>
         return false;
     }
 
-    public void CheckForMouseInput()
+    public void CheckForMouseMovementInput()
     {
         Vector2 mousePos = Input.mousePosition;
-
         if (mousePos != this.lastMousePosition)
         {
             this.lastMousePosition = mousePos;
@@ -205,7 +220,7 @@ public class DemoManager : MonoSingleton<DemoManager>
         }
     }
 
-    public void CheckForKeyInput()
+    public void CheckForAnyKeyInput()
     {
         if (Input.anyKey) // includes mouse clicks
         {
@@ -215,8 +230,6 @@ public class DemoManager : MonoSingleton<DemoManager>
 
     public bool IsIdle()
     {
-        this.idleTimeCount += Time.deltaTime;
-
         if (this.idleTimeCount >= this.timeToIdle)
         {
             return true;

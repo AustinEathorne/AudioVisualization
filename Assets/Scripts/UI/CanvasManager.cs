@@ -12,13 +12,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public GameObject startSceenContainer;
     public Text startScreenErrorText;
     public Image startScreenBG;
-
     public float startScreenFadeTime;
-
-    [Header("SidePanels")]
-    public GameObject visualizationPanel;
-    public GameObject libraryPanel;
-    public List<SettingsPanelBase> settingsPanelList;
 
     [Header("SideButtons")]
     public float sideButtonFadeTime;
@@ -26,6 +20,13 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public List<Vector2> sideButtonPositions;
     public List<RectTransform> sideButtonTransforms;
     public List<Image> sideButtonImages;
+
+    [Header("SidePanels")]
+    public GameObject visualizationPanel;
+    public GameObject libraryPanel;
+    public List<SettingsPanelBase> settingsPanelList;
+    public float sidePanelFadeInTime;
+    public float sidePanelFadeOutTime;
 
     [Header("Search Bar")]
     public Slider searchBar;
@@ -50,8 +51,10 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public List<GameObject> songSelectButtonList;
     public List<Text> songSelectTextList;
 
-    [Header("Escape Container")]
-    public GameObject escapeContainer;
+    [Header("Exit Panel")]
+    public CanvasGroup exitPanelGroup;
+    public float exitPanelFadeInTime;
+    public float exitPanelFadeOutTime;
 
     [Header("ToggledContainers")]
     public CanvasGroup sideButtonGroup;
@@ -61,7 +64,6 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     public CanvasGroup titleGroup;
     public CanvasGroup colourPickerGroup;
 
-    public float sidePanelFadeTime;
     public float demoUiFadeOutTime;
     public float demoUiFadeInTime;
     public bool isDemoUiActive;
@@ -308,9 +310,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public void OnColourPanelToggle(bool _isActive)
     {
-        this.sideButtonImages[0].enabled = _isActive ? false : true;
-
-        this.settingsPanelList[DemoManager.Instance.currentVisualization].OnColourPanelToggle(_isActive);
+        this.StartCoroutine(this.ToggleColourSelectPanel(_isActive));
     }
 
     public void OnBaseColourChange(Color _color)
@@ -346,6 +346,15 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     }
 
 
+    public IEnumerator OpenStartScreen()
+    {
+        this.startScreenErrorText.gameObject.SetActive(true);
+        this.startScreenBG.raycastTarget = true;
+        this.startScreenContentGroup.blocksRaycasts = true;
+        this.startScreenContentGroup.interactable = true;
+        yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.startScreenContentGroup, this.startScreenFadeTime, 1.0f));
+    }
+
     public IEnumerator CloseStartScreen(bool _isUsingExampleAudio, string _filePath)
     {
         this.startScreenContentGroup.interactable = false;
@@ -364,7 +373,7 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     }
     
 
-    public IEnumerator SearchRoutine()
+    private IEnumerator SearchRoutine()
     {
         if (this.isSearching)
             yield break;
@@ -440,9 +449,36 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     }
 
 
-    public void ToggleEscapeContainer()
+    public IEnumerator ToggleEscapeContainer()
     {
-        this.escapeContainer.SetActive(!this.escapeContainer.activeSelf);
+        // Turn off exit panel UI, turn on demo UI
+        if (this.exitPanelGroup.gameObject.activeSelf)
+        {
+            this.exitPanelGroup.interactable = false;
+            this.exitPanelGroup.blocksRaycasts = false;
+
+            UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.exitPanelGroup, this.exitPanelFadeOutTime, 0.0f));
+
+            yield return this.StartCoroutine(this.ToggleDemoUI(true));
+
+            this.exitPanelGroup.gameObject.SetActive(false);
+        }
+        // Turn on exit panel UI, turn off demo UI
+        else
+        {
+            this.exitPanelGroup.gameObject.SetActive(true);
+
+            this.StartCoroutine(this.ToggleDemoUI(false));
+
+            yield return UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.exitPanelGroup, this.exitPanelFadeInTime, 1.0f));
+
+            this.exitPanelGroup.interactable = true;
+            this.exitPanelGroup.blocksRaycasts = true;
+        }
+
+        yield return null;
     }
 
 
@@ -464,20 +500,21 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public IEnumerator ToggleVisualizationPanel()
     {
+        // Fade out panel
         if (this.visualizationPanel.activeSelf)
         {
-            
-            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.visualizationGroup, this.sidePanelFadeTime, 0.0f));
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.visualizationGroup, this.sidePanelFadeOutTime, 0.0f));
             this.visualizationPanel.SetActive(false);
 
             yield return this.StartCoroutine(this.ShiftSideButtons(1, false));
         }
+        // Fade in panel
         else
         {
             yield return this.StartCoroutine(this.ShiftSideButtons(1, true));
 
             this.visualizationPanel.SetActive(true);
-            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.visualizationGroup, this.sidePanelFadeTime, 1.0f));
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.visualizationGroup, this.sidePanelFadeInTime, 1.0f));
         }
 
         yield return null;
@@ -485,15 +522,20 @@ public class CanvasManager : MonoSingleton<CanvasManager>
 
     public IEnumerator ToggleLibraryPanel()
     {
+        // Fade out panel
         if (this.libraryPanel.activeSelf)
         {
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.libraryGroup, this.sidePanelFadeOutTime, 0.0f));
             this.libraryPanel.SetActive(false);
             yield return this.StartCoroutine(this.ShiftSideButtons(2, false));
         }
+        // Fade in panel
         else
         {
             yield return this.StartCoroutine(this.ShiftSideButtons(2, true));
+
             this.libraryPanel.SetActive(true);
+            yield return UIUtility.Instance.StartCoroutine(UIUtility.Instance.FadeOverTime(this.libraryGroup, this.sidePanelFadeInTime, 1.0f));
         }
 
         yield return null;
@@ -646,6 +688,33 @@ public class CanvasManager : MonoSingleton<CanvasManager>
     {
         this.songTitleText.text = AudioManager.Instance.audioSource.clip.name;
         this.visTitleText.text = this.visNameList[DemoManager.Instance.currentVisualization];
+    }
+
+
+    public IEnumerator ToggleColourSelectPanel(bool _isActive)
+    {
+        if (_isActive)
+        {
+            // Fade out settings button
+            UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.sideButtonImages[0], this.sidePanelFadeInTime, 0.0f));
+
+            // Fade out current settings panel + fade in colour select panel
+            yield return this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(
+                this.settingsPanelList[DemoManager.Instance.currentVisualization].ToggleColourPanel(true));
+        }
+        else
+        {
+            // Fade out colour select panel + fade in curernt settings panel
+            this.settingsPanelList[DemoManager.Instance.currentVisualization].StartCoroutine(
+                this.settingsPanelList[DemoManager.Instance.currentVisualization].ToggleColourPanel(false));
+
+            // Fade in settings button
+            yield return UIUtility.Instance.StartCoroutine(
+                UIUtility.Instance.FadeOverTime(this.sideButtonImages[0], this.sidePanelFadeInTime, 1.0f));
+        }
+
+        yield return null;
     }
 
     #endregion
